@@ -19,7 +19,7 @@
         {
             _world = new EcsWorld();
             _worldDisposable = new CancellationTokenSource();
-            _systems = new EcsSystems(_world);
+            _systems = new GeneratorFeature(_world);
             _fixedSystems = new EcsSystems(_world);
             _lateSystems = new EcsSystems(_world);
         }

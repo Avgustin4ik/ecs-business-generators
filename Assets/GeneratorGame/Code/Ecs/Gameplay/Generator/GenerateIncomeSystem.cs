@@ -7,29 +7,29 @@
     public class GenerateIncomeSystem : IEcsInitSystem, IEcsRunSystem
     {
         private EcsWorld _world;
-        private EcsFilter _filter;
-        private EcsPool<GeneratorComponent> _generatorPool;
-        private EcsPool<BalanceComponent> _balancePool;
-        
+        private readonly GeneratorAspect _aspect;
+
+        public GenerateIncomeSystem(GeneratorAspect aspect)
+        {
+            _aspect = aspect;
+        }
+
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _filter = _world.Filter<GeneratorComponent>().End();
-            _generatorPool = _world.GetPool<GeneratorComponent>();
-            _balancePool = _world.GetPool<BalanceComponent>();
         }
         
         public void Run(IEcsSystems systems)
         {
-            foreach (var entity in _filter)
+            foreach (var entity in _aspect.GeneratorFilter)
             {
-                ref var generator = ref _generatorPool.Get(entity);
+                ref var generator = ref _aspect.Generator.Get(entity);
                 
                 if (DateTime.UtcNow < generator.NextIncomeTime) continue;
                 
-                ref var balance = ref _balancePool.Get(entity);
-                balance.value += generator.Income * generator.Level;
                 generator.NextIncomeTime = DateTime.UtcNow.AddSeconds(generator.DurationInSeconds);
+                ref var balance = ref _aspect.Balance.Get(entity);
+                balance.value += generator.Level * generator.BaseIncome * (1f + generator.UpgradesMultiplier);
             }
         }
     }
