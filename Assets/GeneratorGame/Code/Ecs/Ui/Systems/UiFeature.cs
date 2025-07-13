@@ -1,6 +1,5 @@
-namespace GeneratorGame.Code.Ecs.Ui
+namespace GeneratorGame.Code.Ecs.Ui.Systems
 {
-    using System;
     using Leopotam.EcsLite;
 
     public class UiFeature : EcsSystems

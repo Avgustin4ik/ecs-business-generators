@@ -23,6 +23,7 @@
         {
             base.OnInitialize();
             Model.progress.Subscribe(UpdateProgress).AddTo(this);
+            levelUpButton.OnClickAsObservable().Subscribe(_ => Model.levelup = true).AddTo(this);
         }
 
         public void SetLevelText(string text)
@@ -49,5 +50,6 @@
     public class UIGeneratorModel : Model
     {
         public ReactiveProperty<float> progress = new();
+        public bool levelup = false;
     }
 }

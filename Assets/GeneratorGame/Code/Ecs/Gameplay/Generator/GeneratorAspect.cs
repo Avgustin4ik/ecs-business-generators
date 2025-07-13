@@ -8,7 +8,7 @@ namespace GeneratorGame.Code.Ecs.Gameplay.Generator
         public EcsPool<GeneratorComponent> Generator;
         public EcsPool<BalanceComponent> Balance;
         public EcsPool<UpgradeGeneratorSelfEvent> Upgrade;
-        public EcsPool<LevelUpGeneratorSelfEvent> LevelUp;
+        public EcsPool<LevelUpGeneratorRequest> LevelUp;
         public EcsFilter GeneratorFilter;
         public EcsFilter BalanceFilter;
     
@@ -19,7 +19,7 @@ namespace GeneratorGame.Code.Ecs.Gameplay.Generator
             GeneratorFilter = world.Filter<GeneratorComponent>().End();
             BalanceFilter = world.Filter<BalanceComponent>().End();
             Upgrade = world.GetPool<UpgradeGeneratorSelfEvent>();
-            LevelUp = world.GetPool<LevelUpGeneratorSelfEvent>();
+            LevelUp = world.GetPool<LevelUpGeneratorRequest>();
         }
 
     }

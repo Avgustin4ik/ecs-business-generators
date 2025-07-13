@@ -49,7 +49,7 @@
             _uiSystems.Add(new SpawnGeneratorsViewSystem(uiService,generatorDataService, UiRoot));
             _uiSystems.Add(new UpdateProgressSystem());
             _uiSystems.Add(new UpdateBalanceSystem());
-            // _uiSystems.Add(new InitializeUiSystem());
+            _uiSystems.Add(new OnClickLevelUpSystem());
             
             _updateSystems = new GeneratorFeature(_world, generatorDataService);
             _fixedSystems = new EcsSystems(_world);

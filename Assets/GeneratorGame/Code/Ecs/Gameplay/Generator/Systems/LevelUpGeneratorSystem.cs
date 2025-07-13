@@ -6,9 +6,7 @@
     public class LevelUpGeneratorSystem : IEcsInitSystem, IEcsRunSystem
     {
         private readonly GeneratorAspect _aspect;
-        private EcsWorld _world;
         private EcsFilter _filter;
-        private IGeneratorDataService _service;
 
         public LevelUpGeneratorSystem(GeneratorAspect aspect)
         {
@@ -17,8 +15,7 @@
 
         public void Init(IEcsSystems systems)
         {
-            _filter = systems.GetWorld().Filter<LevelUpGeneratorSelfEvent>().Inc<GeneratorComponent>().End();
-            _service = systems.GetShared<IGeneratorDataService>();
+            _filter = systems.GetWorld().Filter<LevelUpGeneratorRequest>().Inc<GeneratorComponent>().End();
         }
 
         public void Run(IEcsSystems systems)
@@ -27,6 +24,7 @@
             {
                 ref var generator = ref _aspect.Generator.Get(entity);
                 generator.Level++;
+                _aspect.LevelUp.Del(entity);
             }
         }
     }
