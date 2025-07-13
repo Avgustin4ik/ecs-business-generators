@@ -3,27 +3,29 @@
     using System;
     using System.Text;
     using Leopotam.EcsLite;
+    using R3;
     using TMPro;
     using UnityEngine;
 
-    public class UIBalanceView : UIBase
+    public class UIBalanceView : UIBase<UIBalanceModel>
     {
         [SerializeField] private TextMeshProUGUI balanceText;
         private readonly StringBuilder _stringBuilder = new StringBuilder(5);
         private const string StringFormat = "F1";
 
-        public override void ApplyEcsWorld<T>(EcsWorld world, int entity = -1)
+        public override void OnInitialize()
         {
-            base.ApplyEcsWorld<UIBalanceView>(world, entity);
+            base.OnInitialize();
+            this.Model.Balance.Subscribe(SetBalanceText).AddTo(this);
         }
 
-        public void SetBalanceText(float text)
+        public void SetBalanceText(float value)
         {
             if (balanceText != null)
                 balanceText.text = _stringBuilder
                     .Clear()
                     .Append("Balance: ")
-                    .Append(text.ToString(StringFormat))
+                    .Append(value.ToString(StringFormat))
                     .Append(" $")
                     .ToString();
             else
@@ -31,5 +33,10 @@
                 Debug.LogError("Balance Text is not assigned in UIBalanceView.");
             }
         }
+    }
+
+    public class UIBalanceModel : Model
+    {
+        public readonly ReactiveProperty<float> Balance = new ReactiveProperty<float>();
     }
 }

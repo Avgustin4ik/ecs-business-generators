@@ -3,9 +3,10 @@
     using System;
     using Mono;
 
-    public struct UIViewComponent<T> where T : UIBase
+    public struct UIViewComponent<TModel> where TModel : Model, new()
     {
-        public UIBase View;
+        public UIBase<TModel> View;
+        public TModel Model;
         public Type Type;
     }
 }

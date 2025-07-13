@@ -7,31 +7,22 @@
     using UnityEngine;
     using UnityEngine.UI;
 
-    public class UIGeneratorView : UIBase
+    public class UIGeneratorView : UIBase<UIGeneratorModel>
     {
+        #region inspector
+
         [SerializeField] private TextMeshProUGUI levelText;
         [SerializeField] private TextMeshProUGUI incomeText;
         [SerializeField] private Button levelUpButton;
         [SerializeField] private CanvasGroup upgradePanel;
         [SerializeField] private Image progressBar;
-
-        public ReactiveProperty<bool> LevelUpClicked = new ReactiveProperty<bool>();
-
-        private void Awake()
+        
+        #endregion
+        
+        public override void OnInitialize()
         {
-            levelUpButton.OnClickAsObservable().Subscribe(_ => LevelUpClicked.Value = true).AddTo(this);
-        }
-
-        public async UniTaskVoid LoadUpgradePanelAsync(Upgrade[] upgrades)
-        {
-            upgradePanel.alpha = 0f;
-            upgradePanel.interactable = false;
-            upgradePanel.blocksRaycasts = false;
-
-            throw new System.NotImplementedException("Implement the upgrade panel loading logic here.");
-            foreach (var upgrade in upgrades)
-            {
-            }
+            base.OnInitialize();
+            Model.progress.Subscribe(UpdateProgress).AddTo(this);
         }
 
         public void SetLevelText(string text)
@@ -53,5 +44,10 @@
 
             progressBar.fillAmount = progress;
         }
+    }
+
+    public class UIGeneratorModel : Model
+    {
+        public ReactiveProperty<float> progress = new();
     }
 }

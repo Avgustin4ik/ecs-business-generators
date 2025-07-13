@@ -15,7 +15,7 @@
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _viewFilter = _world.Filter<UIViewComponent<UIBalanceView>>().End();
+            _viewFilter = _world.Filter<UIViewComponent<UIBalanceModel>>().End();
             _balancePool = _world.GetPool<BalanceComponent>(); // Ensure BalanceComponent is created
             _balanceFilter = _world.Filter<BalanceComponent>().End();
         }
@@ -24,14 +24,13 @@
         {
             foreach (var viewEntity in _viewFilter)
             {
-                ref var viewComponent = ref _world.GetPool<UIViewComponent<UIBalanceView>>().Get(viewEntity);
-                var viewComponentView = viewComponent.View as UIBalanceView;
-                if (viewComponentView == null) continue;
+                ref var viewComponent = ref _world.GetPool<UIViewComponent<UIBalanceModel>>().Get(viewEntity);
+                var model = viewComponent.Model;
 
                 foreach (var balanceEntity in _balanceFilter)
                 {
                     ref var balanceComponent = ref _world.GetPool<BalanceComponent>().Get(balanceEntity);
-                    viewComponentView.SetBalanceText(balanceComponent.value);
+                    model.Balance.Value = balanceComponent.value;
                 }
             }
         }

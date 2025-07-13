@@ -14,7 +14,7 @@
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _viewFilter = _world.Filter<UIViewComponent<UIGeneratorView>>().Inc<GeneratorGuid>().End();
+            _viewFilter = _world.Filter<UIViewComponent<UIGeneratorModel>>().Inc<GeneratorGuid>().End();
             _generatorFilter = _world.Filter<GeneratorComponent>().End();
         }
 
@@ -22,16 +22,15 @@
         {
             foreach (var viewEntity in _viewFilter)
             {
-                ref var viewComponent = ref _world.GetPool<UIViewComponent<UIGeneratorView>>().Get(viewEntity);
-                var viewComponentView = viewComponent.View as UIGeneratorView;
-                if (viewComponentView == null) continue;
+                ref var viewComponent = ref _world.GetPool<UIViewComponent<UIGeneratorModel>>().Get(viewEntity);
                 foreach (var generator in _generatorFilter)
                 {
                     ref var generatorComponent = ref _world.GetPool<GeneratorComponent>().Get(generator);
                     ref var generatorGuid = ref _world.GetPool<GeneratorGuid>().Get(viewEntity);
                     if (generatorComponent.Guid != generatorGuid.Guid) continue;
 
-                    viewComponentView.UpdateProgress((generatorComponent.Progress / generatorComponent.DurationInSeconds));
+                    var model = viewComponent.Model;
+                    model.progress.Value = generatorComponent.Progress / generatorComponent.DurationInSeconds;
                 }
             }
         }

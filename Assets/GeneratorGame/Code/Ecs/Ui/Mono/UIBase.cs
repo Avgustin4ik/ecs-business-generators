@@ -5,22 +5,29 @@
     using Leopotam.EcsLite;
     using UnityEngine;
 
-    public abstract class UIBase : MonoBehaviour
+    public abstract class UIBase<TModel> : MonoBehaviour where TModel : Model, new()
     {
-        EcsWorld _world;
-        private EcsPackedEntity _entity;
-        public EcsPackedEntity Entity => _entity;
+        private EcsWorld _world;
+        public EcsPackedEntity Entity { get; private set; }
+        public TModel Model { get; private set; }
         private bool _isInitialized = false;
-        public virtual void ApplyEcsWorld<T>(EcsWorld world, int entity = -1)  where T : UIBase
+
+        public virtual void ApplyEcsWorld(EcsWorld world, int entity = -1)
         {
-            
             _world = world;
             var uiEntity = entity == -1 ? _world.NewEntity() : entity;
-            ref var viewComponent = ref _world.GetPool<UIViewComponent<T>>().Add(uiEntity);
-            viewComponent.View = this;
+            ref var viewComponent = ref _world.GetPool<UIViewComponent<TModel>>().Add(uiEntity);
+            // viewComponent.View = this;
             viewComponent.Type = GetType();
-            _entity = _world.PackEntity(uiEntity);
+            Entity = _world.PackEntity(uiEntity);
+            Model = new();
+            viewComponent.Model = Model;
+            OnInitialize();
             _isInitialized = true;
+        }
+
+        public virtual void OnInitialize()
+        {
         }
 
         private void Start()
@@ -32,14 +39,14 @@
                 {
                     throw new InvalidOperationException("EcsWorld is not set. Please call ApplyEcsWorld before using this UIBase.");
                 }
-                ApplyEcsWorld<UIBase>(_world);
+                ApplyEcsWorld(_world);
             }
         }
 
         protected virtual void OnDestroy()
         {
             _world = null;
-            _entity = default;
+            Entity = default;
         }
     }
 }

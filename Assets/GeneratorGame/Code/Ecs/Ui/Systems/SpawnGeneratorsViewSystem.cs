@@ -56,7 +56,7 @@ namespace GeneratorGame.Code.Ecs.Ui.Systems
         private void InitializeEntity(UIGeneratorView view, string dataGuid) 
         {
             var entity = _world.NewEntity();
-            view.ApplyEcsWorld<UIGeneratorView>(_world, entity);
+            view.ApplyEcsWorld(_world, entity);
             ref var generatorGuid = ref _generatorGuidPool.Add(entity);
             generatorGuid.Guid = dataGuid;
         }
