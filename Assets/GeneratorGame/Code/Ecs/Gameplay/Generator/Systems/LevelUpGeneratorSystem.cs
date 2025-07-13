@@ -1,7 +1,6 @@
-﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator
+﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator.Systems
 {
     using Leopotam.EcsLite;
-    using Services;
 
     public class LevelUpGeneratorSystem : IEcsInitSystem, IEcsRunSystem
     {
@@ -15,7 +14,7 @@
 
         public void Init(IEcsSystems systems)
         {
-            _filter = systems.GetWorld().Filter<LevelUpGeneratorRequest>().Inc<GeneratorComponent>().End();
+            _filter = systems.GetWorld().Filter<LevelUpGeneratorRequest>().Inc<GeneratorComponent>().Inc<LevelUpPriceComponent>().End();
         }
 
         public void Run(IEcsSystems systems)
@@ -24,6 +23,10 @@
             {
                 ref var generator = ref _aspect.Generator.Get(entity);
                 generator.Level++;
+                generator.CurrentIncome = generator.Level * generator.BaseIncome * (1f + generator.UpgradesMultiplier);
+                ref var price = ref _aspect.LevelUpPrice.Get(entity);
+                price.UpdatePrice(generator.Level);
+                
                 _aspect.LevelUp.Del(entity);
             }
         }

@@ -10,6 +10,7 @@
         GeneratorData GetGeneratorData(string guid);
         float GetBaseIncome(string generatorGuid);
         float[] GetUpgradesMultiplier(string generatorGuid);
+        Upgrade[] GetUpgrades(string generatorGuid);
         IEnumerable<GeneratorData> GetAllGenerators();
     }
 }

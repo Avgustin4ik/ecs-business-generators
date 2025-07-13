@@ -3,6 +3,7 @@
     using System;
     using Gameplay;
     using Leopotam.EcsLite;
+    using R3;
     using UnityEngine;
 
     public abstract class UIBase<TModel> : MonoBehaviour where TModel : Model, new()

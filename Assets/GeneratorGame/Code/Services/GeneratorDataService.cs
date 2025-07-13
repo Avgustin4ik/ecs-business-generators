@@ -24,6 +24,11 @@
             return _generatorDataDictionary[generatorGuid].Upgrades.Select(x => x.IncomeMultiplier).ToArray();
         }
 
+        public Upgrade[] GetUpgrades(string generatorGuid)
+        {
+            return _generatorDataDictionary[generatorGuid].Upgrades;
+        }
+
         public IEnumerable<GeneratorData> GetAllGenerators()
         {
             return _generatorDataDictionary.Values;

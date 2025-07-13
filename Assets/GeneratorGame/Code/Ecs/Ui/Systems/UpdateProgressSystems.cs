@@ -1,37 +1,36 @@
 ﻿namespace GeneratorGame.Code.Ecs.Ui.Systems
 {
-    using System;
-    using Components;
     using Gameplay.Generator;
     using Leopotam.EcsLite;
-    using Mono;
 
     public class UpdateProgressSystem : IEcsInitSystem, IEcsRunSystem
     {
+        private readonly GeneratorAspect _aspect;
+        private readonly UiAspect _uiAspect;
         private EcsWorld _world;
-        private EcsFilter _viewFilter;
-        private EcsFilter _generatorFilter;
+
+        public UpdateProgressSystem(GeneratorAspect aspect, UiAspect uiAspect)
+        {
+            _aspect = aspect;
+            _uiAspect = uiAspect;
+        }
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _viewFilter = _world.Filter<UIViewComponent<UIGeneratorModel>>().Inc<GeneratorGuid>().End();
-            _generatorFilter = _world.Filter<GeneratorComponent>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
-            foreach (var viewEntity in _viewFilter)
+            foreach (var viewEntity in _uiAspect.GeneratorViewFilter)
             {
-                ref var viewComponent = ref _world.GetPool<UIViewComponent<UIGeneratorModel>>().Get(viewEntity);
-                foreach (var generator in _generatorFilter)
-                {
-                    ref var generatorComponent = ref _world.GetPool<GeneratorComponent>().Get(generator);
-                    ref var generatorGuid = ref _world.GetPool<GeneratorGuid>().Get(viewEntity);
-                    if (generatorComponent.Guid != generatorGuid.Guid) continue;
-
-                    var model = viewComponent.Model;
-                    model.progress.Value = generatorComponent.Progress / generatorComponent.DurationInSeconds;
-                }
+                ref var viewComponent = ref _uiAspect.GeneratorView.Get(viewEntity);
+                ref var link = ref _uiAspect.GeneratorLinked.Get(viewEntity);
+                if(!link.Entity.Unpack(_world,out var generatorEntity)) continue;
+                
+                ref var generatorComponent = ref _aspect.Generator.Get(generatorEntity);
+                var model = viewComponent.Model;
+                model.progress.Value = generatorComponent.Progress / generatorComponent.DurationInSeconds;
+                
             }
         }
     }

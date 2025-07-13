@@ -13,68 +13,63 @@ MonoBehaviour:
   m_Name: GeneratorDataServiceSource
   m_EditorClassIdentifier: 
   GeneratorDataList:
-  - Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 1"
+  - BasePrice: 3
+    Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 1"
     Level: 1
     Income: 11
     DurationInSeconds: 3
     Upgrades:
     - Name: Upgrade 1
-      Cost: 111
+      Price: 0
       IncomeMultiplier: 300
-      Purchased: 0
     - Name: Upgrade 2
-      Cost: 444
+      Price: 0
       IncomeMultiplier: 444
-      Purchased: 0
-  - Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 2"
+  - BasePrice: 44
+    Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 2"
     Level: 1
     Income: 11
     DurationInSeconds: 3
     Upgrades:
     - Name: Upgrade 1
-      Cost: 111
+      Price: 0
       IncomeMultiplier: 300
-      Purchased: 0
     - Name: Upgrade 2
-      Cost: 444
+      Price: 0
       IncomeMultiplier: 444
-      Purchased: 0
-  - Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 3"
+  - BasePrice: 66
+    Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 3"
     Level: 1
     Income: 11
     DurationInSeconds: 3
     Upgrades:
     - Name: Upgrade 1
-      Cost: 111
+      Price: 0
       IncomeMultiplier: 300
-      Purchased: 0
     - Name: Upgrade 2
-      Cost: 444
+      Price: 0
       IncomeMultiplier: 444
-      Purchased: 0
-  - Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 4"
+  - BasePrice: 66
+    Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 4"
     Level: 1
     Income: 11
     DurationInSeconds: 3
     Upgrades:
     - Name: Upgrade 1
-      Cost: 111
+      Price: 0
       IncomeMultiplier: 300
-      Purchased: 0
     - Name: Upgrade 2
-      Cost: 444
+      Price: 0
       IncomeMultiplier: 444
-      Purchased: 0
-  - Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 5"
+  - BasePrice: 666
+    Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 5"
     Level: 1
     Income: 11
     DurationInSeconds: 3
     Upgrades:
     - Name: Upgrade 1
-      Cost: 111
+      Price: 0
       IncomeMultiplier: 300
-      Purchased: 0
     - Name: Upgrade 2
-      Cost: 444
+      Price: 0
       IncomeMultiplier: 444
-      Purchased: 0

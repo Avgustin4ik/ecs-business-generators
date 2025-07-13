@@ -25,6 +25,8 @@
             foreach (var entity in _aspect.GeneratorFilter)
             {
                 ref var generator = ref _aspect.Generator.Get(entity);
+                if (generator.Level == 0) continue;
+                
                 generator.Progress += Time.deltaTime;
                 if (generator.DurationInSeconds > generator.Progress) continue;
                 generator.Progress = 0;
@@ -32,7 +34,7 @@
                 foreach (var balanceEntity in _aspect.BalanceFilter)
                 {
                     ref var balance = ref _aspect.Balance.Get(balanceEntity);
-                    balance.value += generator.Level * generator.BaseIncome * (1f + generator.UpgradesMultiplier);
+                    balance.value += generator.CurrentIncome;
                 }
             }
         }

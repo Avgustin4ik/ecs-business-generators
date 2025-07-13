@@ -9,7 +9,8 @@
         public float BaseIncome;
         public float DurationInSeconds;
         public float UpgradesMultiplier;
-        public string Guid;
         public float Progress;
+        public string Guid;
+        public float CurrentIncome;
     }
 }

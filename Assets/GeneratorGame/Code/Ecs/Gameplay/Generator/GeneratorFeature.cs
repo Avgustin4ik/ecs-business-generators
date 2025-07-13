@@ -2,6 +2,8 @@
 
 namespace GeneratorGame.Code.Ecs.Gameplay.Generator
 {
+    using Systems;
+
     public class GeneratorFeature : EcsSystems
     {
         public GeneratorFeature(EcsWorld world, object shared = null) : base(world, shared)
