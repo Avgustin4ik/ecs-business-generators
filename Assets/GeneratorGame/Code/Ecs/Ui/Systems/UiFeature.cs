@@ -7,6 +7,7 @@ namespace GeneratorGame.Code.Ecs.Ui
     {
         public UiFeature(EcsWorld world, object shared = null) : base(world, shared)
         {
+            
         }
     }
 }

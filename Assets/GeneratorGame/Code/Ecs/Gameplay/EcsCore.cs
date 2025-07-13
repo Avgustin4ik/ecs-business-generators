@@ -26,18 +26,31 @@
         public Transform UiRoot;
         private EcsSystems _debugSystems;
 
+        public static class EcsGlobalData
+        {
+            public static EcsWorld World { get; private set; }
+            public static void SetWorld(EcsWorld world)
+            {
+                World = world ?? throw new ArgumentNullException(nameof(world), "EcsWorld cannot be null");
+            }
+        }
+
+
         private void Awake()
         {
             _world = new EcsWorld();
+            EcsGlobalData.SetWorld(_world); //для доступности в монобехах
+            
             _worldDisposable = new CancellationTokenSource();
             var generatorDataService = GeneratorDataServiceSource.CreateService();
             var uiService = UiServiceSource.CreateService();
 
             _uiSystems = new UiFeature(_world);//TODO добавить возможность добавления нескольких Shaerd объектов в системы (фичи)
-            
             _uiSystems.Add(new SpawnGeneratorsViewSystem(uiService,generatorDataService, UiRoot));
             _uiSystems.Add(new UpdateProgressSystem());
             _uiSystems.Add(new UpdateBalanceSystem());
+            // _uiSystems.Add(new InitializeUiSystem());
+            
             _updateSystems = new GeneratorFeature(_world, generatorDataService);
             _fixedSystems = new EcsSystems(_world);
             _lateSystems = new EcsSystems(_world);

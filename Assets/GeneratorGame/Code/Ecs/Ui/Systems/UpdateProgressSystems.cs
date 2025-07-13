@@ -1,5 +1,7 @@
 ﻿namespace GeneratorGame.Code.Ecs.Ui.Systems
 {
+    using System;
+    using Components;
     using Gameplay.Generator;
     using Leopotam.EcsLite;
     using Mono;
@@ -12,14 +14,25 @@
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
-            _viewFilter = _world.Filter<UIViewComponent<UIGeneratorView>>().End();
+            _viewFilter = _world.Filter<UIViewComponent<UIGeneratorView>>().Inc<GeneratorGuid>().End();
+            _generatorFilter = _world.Filter<GeneratorComponent>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
             foreach (var viewEntity in _viewFilter)
             {
-                
+                ref var viewComponent = ref _world.GetPool<UIViewComponent<UIGeneratorView>>().Get(viewEntity);
+                var viewComponentView = viewComponent.View as UIGeneratorView;
+                if (viewComponentView == null) continue;
+                foreach (var generator in _generatorFilter)
+                {
+                    ref var generatorComponent = ref _world.GetPool<GeneratorComponent>().Get(generator);
+                    ref var generatorGuid = ref _world.GetPool<GeneratorGuid>().Get(viewEntity);
+                    if (generatorComponent.Guid != generatorGuid.Guid) continue;
+
+                    viewComponentView.UpdateProgress((generatorComponent.Progress / generatorComponent.DurationInSeconds));
+                }
             }
         }
     }

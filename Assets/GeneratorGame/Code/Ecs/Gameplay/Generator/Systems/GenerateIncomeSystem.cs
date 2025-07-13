@@ -3,6 +3,7 @@
     using System;
     using Leopotam.EcsLite;
     using Player;
+    using UnityEngine;
 
     public class GenerateIncomeSystem : IEcsInitSystem, IEcsRunSystem
     {
@@ -18,18 +19,21 @@
         {
             _world = systems.GetWorld();
         }
-        
+
         public void Run(IEcsSystems systems)
         {
             foreach (var entity in _aspect.GeneratorFilter)
             {
                 ref var generator = ref _aspect.Generator.Get(entity);
+                generator.Progress += Time.deltaTime;
+                if (generator.DurationInSeconds > generator.Progress) continue;
+                generator.Progress = 0;
                 
-                if (DateTime.UtcNow < generator.NextIncomeTime) continue;
-                
-                generator.NextIncomeTime = DateTime.UtcNow.AddSeconds(generator.DurationInSeconds);
-                ref var balance = ref _aspect.Balance.Get(entity);
-                balance.value += generator.Level * generator.BaseIncome * (1f + generator.UpgradesMultiplier);
+                foreach (var balanceEntity in _aspect.BalanceFilter)
+                {
+                    ref var balance = ref _aspect.Balance.Get(balanceEntity);
+                    balance.value += generator.Level * generator.BaseIncome * (1f + generator.UpgradesMultiplier);
+                }
             }
         }
     }

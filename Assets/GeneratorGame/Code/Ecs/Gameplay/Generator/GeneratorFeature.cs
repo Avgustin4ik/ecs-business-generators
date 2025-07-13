@@ -7,6 +7,7 @@ namespace GeneratorGame.Code.Ecs.Gameplay.Generator
         public GeneratorFeature(EcsWorld world, object shared = null) : base(world, shared)
         {
             var aspect = new GeneratorAspect(world);
+            this.Add(new StartGameSystem(aspect));
             this.Add(new CreateGeneratorSystem(aspect));
             this.Add(new GenerateIncomeSystem(aspect));
             this.Add(new LevelUpGeneratorSystem(aspect));

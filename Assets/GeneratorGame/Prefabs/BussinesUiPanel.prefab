@@ -937,6 +937,7 @@ MonoBehaviour:
   incomeText: {fileID: 228892014947574268}
   levelUpButton: {fileID: 1923906684023377420}
   upgradePanel: {fileID: 7152441494707100916}
+  progressBar: {fileID: 4110733122524025231}
 --- !u!1 &6250045578262234742
 GameObject:
   m_ObjectHideFlags: 0

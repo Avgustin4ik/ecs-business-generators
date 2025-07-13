@@ -27,9 +27,6 @@
             generator.BaseIncome = data.Income;
             generator.DurationInSeconds = data.DurationInSeconds;
             generator.UpgradesMultiplier = 0f;
-
-            // Initialize next income time
-            generator.NextIncomeTime = DateTime.UtcNow.AddSeconds(data.DurationInSeconds);
         }
     }
 }
