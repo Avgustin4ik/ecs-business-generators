@@ -2,35 +2,74 @@
 {
     using System;
     using System.Threading;
+    using Generator;
     using Leopotam.EcsLite;
+    using Services;
+    using Services.Ui;
+    using Ui;
+    using Ui.Systems;
     using UnityEngine;
 
     public class EcsCore : MonoBehaviour
     {
+        public GeneratorDataServiceSource GeneratorDataServiceSource;
+        public UiServiceSource UiServiceSource;
         private EcsWorld _world;
         private IDisposable _worldDisposable;
-        private IEcsSystems _systems;
+        private IEcsSystems _updateSystems;
         private IEcsSystems _fixedSystems;
         private IEcsSystems _lateSystems;
+        private UiFeature _uiSystems;
         public EcsWorld World => _world;
         public IDisposable WorldDisposable => _worldDisposable;
-        
+    
+        public Transform UiRoot;
+        private EcsSystems _debugSystems;
+
         private void Awake()
         {
             _world = new EcsWorld();
             _worldDisposable = new CancellationTokenSource();
-            _systems = new GeneratorFeature(_world);
+            var generatorDataService = GeneratorDataServiceSource.CreateService();
+            var uiService = UiServiceSource.CreateService();
+
+            _uiSystems = new UiFeature(_world);//TODO добавить возможность добавления нескольких Shaerd объектов в системы (фичи)
+            
+            _uiSystems.Add(new SpawnGeneratorsViewSystem(uiService,generatorDataService, UiRoot));
+            _uiSystems.Add(new UpdateProgressSystem());
+            _uiSystems.Add(new UpdateBalanceSystem());
+            _updateSystems = new GeneratorFeature(_world, generatorDataService);
             _fixedSystems = new EcsSystems(_world);
             _lateSystems = new EcsSystems(_world);
+            
+            _debugSystems = new EcsSystems(_world);
+#if UNITY_EDITOR
+                // Регистрируем отладочные системы по контролю за состоянием каждого отдельного мира:
+                // .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ("events"))
+                _debugSystems.Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
+                    // Регистрируем отладочные системы по контролю за текущей группой систем. 
+                    .Add(new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem());
+#endif
         }
         
         private void Start()
         {
+            _uiSystems.Init();
+            _updateSystems.Init();
+            _fixedSystems.Init();
+            _lateSystems.Init();
+            
+#if UNITY_EDITOR
+            // Инициализируем отладочные системы:
+            _debugSystems.Init();
+#endif
         }
         
         private void Update()
         {
-            _systems?.Run();
+            _debugSystems?.Run();
+            _updateSystems?.Run();
+            _uiSystems?.Run();
         }
         
         private void FixedUpdate()
@@ -45,14 +84,16 @@
         
         private void OnDestroy()
         {
-            _systems?.Destroy();
+            _updateSystems?.Destroy();
             _fixedSystems?.Destroy();
             _lateSystems?.Destroy();
             _worldDisposable?.Dispose();
+            _uiSystems?.Destroy();
             _world?.Destroy();
             _world = null;
+            _uiSystems = null;
             _worldDisposable = null;
-            _systems = null;
+            _updateSystems = null;
             _fixedSystems = null;
             _lateSystems = null;
         }

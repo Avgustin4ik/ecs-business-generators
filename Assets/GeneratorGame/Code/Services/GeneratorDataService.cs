@@ -1,7 +1,7 @@
 ﻿namespace GeneratorGame.Code.Services
 {
-    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class GeneratorDataService : IGeneratorDataService
     {
@@ -19,9 +19,14 @@
 
         public float GetBaseIncome(string generatorGuid) => _generatorDataDictionary[generatorGuid].Income;
 
-        public float GetUpgradesMultiplier(string generatorGuid)
+        public float[] GetUpgradesMultiplier(string generatorGuid)
         {
-            throw new NotImplementedException();
+            return _generatorDataDictionary[generatorGuid].Upgrades.Select(x => x.IncomeMultiplier).ToArray();
+        }
+
+        public IEnumerable<GeneratorData> GetAllGenerators()
+        {
+            return _generatorDataDictionary.Values;
         }
     }
 }

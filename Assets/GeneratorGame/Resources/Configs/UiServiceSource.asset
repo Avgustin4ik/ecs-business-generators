@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf11b5f3f8c9420ca4549119594ab93f, type: 3}
+  m_Name: UiServiceSource
+  m_EditorClassIdentifier: 
+  uiGeneratorViewPrefab: {fileID: 8582396686794062181, guid: 04a28a122b3e3d0438bb4681acbe308b, type: 3}
