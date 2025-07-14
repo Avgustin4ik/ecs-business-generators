@@ -3,10 +3,11 @@
     using System;
 
     [Serializable]
-    public struct Upgrade
+    public class Upgrade
     {
-        public string Name;
         public float Price;
         public float IncomeMultiplier;
+        public string Name;
+        public string Guid { get; } = System.Guid.NewGuid().ToString();
     }
 }

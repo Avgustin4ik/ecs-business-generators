@@ -42,7 +42,7 @@
                     upgrade.Multiplayer = availableUpgrade.IncomeMultiplier;
                     upgrade.Name = availableUpgrade.Name;
                     upgrade.Price = availableUpgrade.Price;
-                    upgrade.Guid = System.Guid.NewGuid().ToString();
+                    upgrade.Guid = availableUpgrade.Guid;
                     upgrade.GeneratorGuid = generator.Guid;
                 }
                 index++;

@@ -491,9 +491,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48b6a94b48f6410d90cf7a732e2e5616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GeneratorDataServiceSource: {fileID: 11400000, guid: 664776846289d4e4fb84500a9e5e9930, type: 2}
-  UiServiceSource: {fileID: 11400000, guid: b32dac6f068b1924e929f0ffd6c47291, type: 2}
-  UiRoot: {fileID: 2070854237}
+  generatorDataServiceSource: {fileID: 11400000, guid: 664776846289d4e4fb84500a9e5e9930, type: 2}
+  uiServiceSource: {fileID: 11400000, guid: b32dac6f068b1924e929f0ffd6c47291, type: 2}
+  uiRoot: {fileID: 2070854237}
 --- !u!1 &1277103647
 GameObject:
   m_ObjectHideFlags: 0

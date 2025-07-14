@@ -1,12 +1,13 @@
-﻿namespace GeneratorGame.Code.Ecs.Gameplay
+﻿namespace GeneratorGame.Code.Ecs
 {
     using System;
-    using Generator;
-    using Generator.Systems;
+    using Gameplay.SaveLoad;
+    using GeneratorGame.Code.Ecs.Gameplay.Generator;
+    using GeneratorGame.Code.Ecs.Gameplay.Generator.Systems;
+    using GeneratorGame.Code.Ecs.Ui.Systems;
+    using GeneratorGame.Code.Services;
+    using GeneratorGame.Code.Services.Ui;
     using Leopotam.EcsLite;
-    using Services;
-    using Services.Ui;
-    using Ui.Systems;
     using UnityEngine;
 
     public class EcsCore : MonoBehaviour
@@ -19,6 +20,7 @@
         public EcsWorld World => _world;
         public Transform uiRoot;
         private EcsSystems _debugSystems;
+        private EcsSystems _saveLoadSystems;
 
         public static class EcsGlobalData
         {
@@ -34,13 +36,16 @@
         {
             _world = new EcsWorld();
             EcsGlobalData.SetWorld(_world); //для доступности в монобехах
-
             var generatorDataService = generatorDataServiceSource.CreateService();
             var uiService = uiServiceSource.CreateService();
 
             var generatorAspect = new GeneratorAspect(_world);
             var uiAspect = new UiAspect(_world);
 
+            _saveLoadSystems = new EcsSystems(_world);
+            _saveLoadSystems
+                .Add(new SaveSystem(generatorAspect))
+                .Add(new LoadSystem(generatorAspect));
             _uiSystems = new EcsSystems(_world);
             _uiSystems
                 .Add(new SpawnGeneratorsViewSystem(generatorAspect, uiService, uiRoot))
@@ -72,6 +77,7 @@
 
         private void Start()
         {
+            _saveLoadSystems.Init();
             _uiSystems.Init();
             _gameplaySystems.Init();
 #if UNITY_EDITOR
@@ -84,16 +90,20 @@
         {
             _debugSystems?.Run();
             _gameplaySystems?.Run();
+            _saveLoadSystems?.Run();
             _uiSystems?.Run();
         }
         private void OnDestroy()
         {
+            _saveLoadSystems?.Run();
+            _saveLoadSystems?.Destroy();
             _gameplaySystems?.Destroy();
             _uiSystems?.Destroy();
             _world?.Destroy();
             _world = null;
             _uiSystems = null;
             _gameplaySystems = null;
+            _saveLoadSystems = null;
         }
     }
 }
