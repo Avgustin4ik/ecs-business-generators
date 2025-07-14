@@ -15,7 +15,7 @@
 
         public void Init(IEcsSystems systems)
         {
-            _filter = systems.GetWorld().Filter<LevelUpGeneratorRequest>().Inc<GeneratorComponent>().Inc<LevelUpPriceComponent>().End();
+            _filter = systems.GetWorld().Filter<LevelUpGeneratorSelfRequest>().Inc<GeneratorComponent>().Inc<LevelUpPriceComponent>().End();
         }
 
         public void Run(IEcsSystems systems)

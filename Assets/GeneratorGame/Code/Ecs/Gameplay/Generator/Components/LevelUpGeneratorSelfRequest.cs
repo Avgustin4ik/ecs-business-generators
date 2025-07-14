@@ -1,6 +1,6 @@
 ﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator.Components
 {
-    public struct LevelUpGeneratorRequest 
+    public struct LevelUpGeneratorSelfRequest 
     {
         public string generatorGuid;
     }

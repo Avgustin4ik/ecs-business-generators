@@ -1,22 +1,22 @@
-﻿using GeneratorGame.Code.Ecs.Gameplay.Player;
-using Leopotam.EcsLite;
-
-namespace GeneratorGame.Code.Ecs.Gameplay.Generator
+﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator
 {
-    using System.Collections;
+    using GeneratorGame.Code.Ecs.Gameplay.Player;
+    using Leopotam.EcsLite;
     using Components;
-    using Ui.Systems;
 
     public struct GeneratorAspect
     {
         public EcsPool<GeneratorComponent> Generator;
         public EcsPool<BalanceComponent> Balance;
         public EcsPool<UpgradeGeneratorRequest> Upgrade;
-        public EcsPool<LevelUpGeneratorRequest> LevelUp;
+        public EcsPool<LevelUpGeneratorSelfRequest> LevelUp;
+        public EcsPool<LevelUpPriceComponent> LevelUpPrice;
+        public EcsPool<AvailableUpgradeComponent> AvailableUpgrade;
+        public EcsPool<PurchasedFlagComponent> Purchased;
+        public EcsFilter AvailableUpgradeFilter;
         public EcsFilter GeneratorFilter;
         public EcsFilter BalanceFilter;
-        public EcsPool<LevelUpPriceComponent> LevelUpPrice;
-    
+
         public GeneratorAspect(EcsWorld world)
         {
             Generator = world.GetPool<GeneratorComponent>();
@@ -24,15 +24,12 @@ namespace GeneratorGame.Code.Ecs.Gameplay.Generator
             GeneratorFilter = world.Filter<GeneratorComponent>().End();
             BalanceFilter = world.Filter<BalanceComponent>().End();
             Upgrade = world.GetPool<UpgradeGeneratorRequest>();
-            LevelUp = world.GetPool<LevelUpGeneratorRequest>();
+            LevelUp = world.GetPool<LevelUpGeneratorSelfRequest>();
             LevelUpPrice = world.GetPool<LevelUpPriceComponent>();
             AvailableUpgrade = world.GetPool<AvailableUpgradeComponent>();
             AvailableUpgradeFilter = world.Filter<AvailableUpgradeComponent>().End();
             Purchased = world.GetPool<PurchasedFlagComponent>();
         }
 
-        public EcsPool<AvailableUpgradeComponent> AvailableUpgrade;
-        public EcsFilter AvailableUpgradeFilter;
-        public EcsPool<PurchasedFlagComponent> Purchased;
     }
 }

@@ -10,6 +10,7 @@ namespace GeneratorGame.Code.Ecs.Gameplay.SaveLoad
         private readonly GeneratorAspect _aspect;
         private EcsFilter _filter;
         private EcsPool<GameLoadedFlagComponent> _pool;
+        private EcsFilter _levleUpPriceFilter;
 
         public LoadSystem(GeneratorAspect aspect)
         {
@@ -20,6 +21,7 @@ namespace GeneratorGame.Code.Ecs.Gameplay.SaveLoad
             var world = systems.GetWorld();
             _filter = world.Filter<GameLoadedFlagComponent>().End();
             _pool = world.GetPool<GameLoadedFlagComponent>();
+            _levleUpPriceFilter = world.Filter<LevelUpPriceComponent>().End();
         }
 
         public void Run(IEcsSystems systems)
@@ -44,8 +46,17 @@ namespace GeneratorGame.Code.Ecs.Gameplay.SaveLoad
 #endif
                 }
                 var data = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveSystem.GeneratorSaveData>(json);
+                
                 generator.Progress = data.Progress;
                 generator.Level = data.Level;
+                generator.UpdateIncome();
+                
+                
+                ref var lvlupPrice = ref _aspect.LevelUpPrice.Get(e);
+                lvlupPrice.UpdatePrice(generator.Level);
+                // foreach (var entity in _levleUpPriceFilter)
+                // {
+                // }
             }
 
             var upgradesJson = PlayerPrefs.GetString("upgrades",string.Empty);
@@ -66,13 +77,14 @@ namespace GeneratorGame.Code.Ecs.Gameplay.SaveLoad
             {
                 ref var upgrade = ref _aspect.AvailableUpgrade.Get(e);
                 if (!upgradesSaveHashSet.Contains(upgrade.Guid)) continue;
+                if (_aspect.Purchased.Has(e)) continue;
                 _aspect.Purchased.Add(e);
                 
                 foreach (var genEntity in _aspect.GeneratorFilter)
                 {
-                    ref var generator = ref _aspect.Generator.Get(e);
+                    ref var generator = ref _aspect.Generator.Get(genEntity);
                     if(generator.Guid != upgrade.GeneratorGuid) continue;
-                    ref var upgradeRequest = ref _aspect.Upgrade.Add(genEntity);
+                    ref var upgradeRequest = ref _aspect.Upgrade.Add(systems.GetWorld().NewEntity());
                     upgradeRequest.Multiplier = upgrade.Multiplayer;
                     upgradeRequest.generatorGuid = generator.Guid;
                 }

@@ -14,62 +14,77 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GeneratorDataList:
   - BasePrice: 3
-    Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 1"
+    Name: "\u0411\u0438\u0437\u043D\u0435\u0441 1"
     Level: 1
-    Income: 11
+    Income: 3
     DurationInSeconds: 3
+    guid: 1df9b1c3-d161-4a89-bdb8-32afbdf49e56
     Upgrades:
-    - Name: Upgrade 1
-      Price: 22
-      IncomeMultiplier: 300
-    - Name: Upgrade 2
-      Price: 44
-      IncomeMultiplier: 444
-  - BasePrice: 44
-    Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 2"
+    - Price: 50
+      IncomeMultiplier: 50
+      Name: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0435 1"
+      guid: 9bc94131-136d-4549-add9-9e7ab3dc5645
+    - Price: 400
+      IncomeMultiplier: 100
+      Name: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0435 2"
+      guid: a5ea7a89-6f90-4e92-b6df-03314a922d22
+  - BasePrice: 40
+    Name: "\u0411\u0438\u0437\u043D\u0435\u0441 2"
     Level: 1
-    Income: 11
-    DurationInSeconds: 3
+    Income: 40
+    DurationInSeconds: 6
+    guid: 1ab724c2-9ed6-49e7-a7e7-004ae35f34f0
     Upgrades:
-    - Name: Upgrade 1
-      Price: 0
-      IncomeMultiplier: 300
-    - Name: Upgrade 2
-      Price: 0
-      IncomeMultiplier: 444
-  - BasePrice: 66
-    Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 3"
+    - Price: 1200
+      IncomeMultiplier: 100
+      Name: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0435 1"
+      guid: 96515287-5c5d-43dc-af2a-1ec583d57b8d
+    - Price: 4000
+      IncomeMultiplier: 200
+      Name: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0435 2"
+      guid: 4c60932d-14b4-4843-a3a2-0adedf73bfc2
+  - BasePrice: 200
+    Name: "\u0411\u0438\u0437\u043D\u0435\u0441 3"
     Level: 1
-    Income: 11
-    DurationInSeconds: 3
+    Income: 200
+    DurationInSeconds: 10
+    guid: c75988ab-1739-438f-8179-148cae12aff0
     Upgrades:
-    - Name: Upgrade 1
-      Price: 0
-      IncomeMultiplier: 300
-    - Name: Upgrade 2
-      Price: 0
-      IncomeMultiplier: 444
-  - BasePrice: 66
-    Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 4"
+    - Price: 6000
+      IncomeMultiplier: 100
+      Name: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0435 1"
+      guid: f4bdc6e0-e9c5-49c1-aea4-4df550229fbb
+    - Price: 20000
+      IncomeMultiplier: 150
+      Name: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0435 2"
+      guid: 3a93b06c-65d2-4826-8c4b-14b6363d0d5e
+  - BasePrice: 1000
+    Name: "\u0411\u0438\u0437\u043D\u0435\u0441 4"
     Level: 1
-    Income: 11
-    DurationInSeconds: 3
+    Income: 1000
+    DurationInSeconds: 17
+    guid: 19fd072c-6b69-4b0e-85b8-b98c6e7f5ec4
     Upgrades:
-    - Name: Upgrade 1
-      Price: 0
-      IncomeMultiplier: 300
-    - Name: Upgrade 2
-      Price: 0
-      IncomeMultiplier: 444
-  - BasePrice: 666
-    Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 5"
+    - Price: 15000
+      IncomeMultiplier: 100
+      Name: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0435 1"
+      guid: 2ac1a621-bcc0-4703-a7bf-3970cc035de5
+    - Price: 50000
+      IncomeMultiplier: 200
+      Name: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0435 2"
+      guid: d348ef2f-1323-48f0-a4e5-2c5b4f52035c
+  - BasePrice: 5000
+    Name: "\u0411\u0438\u0437\u043D\u0435\u0441 5"
     Level: 1
-    Income: 11
-    DurationInSeconds: 3
+    Income: 5000
+    DurationInSeconds: 30
+    guid: 906693b5-ead4-4ba6-8d4c-9733adaf3350
     Upgrades:
-    - Name: Upgrade 1
-      Price: 0
-      IncomeMultiplier: 300
-    - Name: Upgrade 2
-      Price: 0
-      IncomeMultiplier: 444
+    - Price: 100000
+      IncomeMultiplier: 200
+      Name: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0435 1"
+      guid: e63b0121-4fbc-40ea-97c4-bec43bd91de7
+    - Price: 500000
+      IncomeMultiplier: 400
+      Name: "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0435 2  "
+      guid: 232ab96b-9928-4a34-9929-2b17391a9bcd
