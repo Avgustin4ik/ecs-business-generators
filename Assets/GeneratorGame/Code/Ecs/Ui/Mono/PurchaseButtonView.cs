@@ -12,10 +12,6 @@
         [SerializeField] private Button button;
         [SerializeField] private TextMeshProUGUI priceLabel;
         [SerializeField] private TextMeshProUGUI rewardLabel;
-        public override void ApplyEcsWorld(EcsWorld world, int entity = -1)
-        {
-            base.ApplyEcsWorld(world, entity);
-        }
 
         public override void OnInitialize()
         {

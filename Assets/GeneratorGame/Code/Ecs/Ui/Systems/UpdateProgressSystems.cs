@@ -30,7 +30,6 @@
                 ref var generatorComponent = ref _aspect.Generator.Get(generatorEntity);
                 var model = viewComponent.Model;
                 model.progress.Value = generatorComponent.Progress / generatorComponent.DurationInSeconds;
-                
             }
         }
     }

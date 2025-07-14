@@ -31,14 +31,14 @@
             base.OnInitialize();
             Model.progress.Subscribe(UpdateProgress).AddTo(this);
             
-            levelUpButton.OnClickAsObservable().Subscribe(_ => Model.levelup = true).AddTo(this);
+            levelUpButton.OnClickAsObservable().Subscribe(_ => Model.OnLevelUpSignal.SetValue(true)).AddTo(this);
             
             Model.levelUpAvailable.Subscribe(x => levelUpButton.interactable = x).AddTo(this);
             Model.levelupPrice.Subscribe(SetLevelUpPriceLabel).AddTo(this);
             Model.level.Subscribe(x => levelText.text = x.ToString());
-            Model.income.Subscribe(x => incomeText.text = x.ToString());            
-            
-            Model.upgrades.Subscribe(SpawnButton).AddTo(this);
+            Model.income.Subscribe(x => incomeText.text = x.ToString());
+            Model.spawn.Subscribe(SpawnButton).AddTo(this);
+
         }
 
         private void SetLevelUpPriceLabel(float price)
@@ -46,20 +46,35 @@
             levelUpPriceLabel.text = $"Цена: {price}$";
         }
 
-        public PurchaseButtonView upgradeButtonView;
-        private void SpawnButton(ICollection<Upgrade> upgrades)
+        private void SpawnButton(string upgradeGuid)
+        {
+            var tAsync = Object.InstantiateAsync<UpgradeButtonView>(upgradeButtonView, upgradePanel.transform).GetOperation();
+            tAsync.WaitForCompletion();
+            var button = (UpgradeButtonView)tAsync.Result.First();
+            button.ApplyEcsWorld(EcsCore.EcsGlobalData.World);
+            button.Model.Guid = upgradeGuid;
+            Debug.Log($"Upgrade Button with guid {upgradeGuid} should be spawned");
+        }
+
+        public UpgradeButtonView upgradeButtonView;
+        private void SpawnButton(ICollection<UpgradeButtonModel> upgrades)
         {
             if(upgrades == null) return;
-            foreach (var upgrade in upgrades)
+            foreach (var upgradeButtonModel in upgrades)
             {
-                var tAsync = Object.InstantiateAsync<PurchaseButtonView>(upgradeButtonView, upgradePanel.transform).GetOperation();
+                var tAsync = Object.InstantiateAsync<UpgradeButtonView>(upgradeButtonView, upgradePanel.transform).GetOperation();
                 tAsync.WaitForCompletion();
-                var button = (PurchaseButtonView)tAsync.Result.First();
+                var button = (UpgradeButtonView)tAsync.Result.First();
                 button.ApplyEcsWorld(EcsCore.EcsGlobalData.World);
-                button.Model.Price.Value = upgrade.Price;
-                button.Model.Reward.Value = upgrade.IncomeMultiplier;
-                button.Model.OnClick.Subscribe();
-                upgradeButtons.Add(button.Model);
+                var buttonModel = button.Model;
+                buttonModel.Price.Value = upgradeButtonModel.Price.Value;
+                buttonModel.Multiplayer.Value = upgradeButtonModel.Multiplayer.Value;
+                buttonModel.IsInteractable.Value = upgradeButtonModel.IsInteractable.Value;
+                buttonModel.Name.Value = upgradeButtonModel.Name.Value;
+                buttonModel.IsPurchased.Value = upgradeButtonModel.IsPurchased.Value;
+                
+                // buttonModel.OnClick.Subscribe();
+                // upgradeButtons.Add(buttonModel);
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(upgradePanel.transform as RectTransform);
         }
@@ -83,8 +98,7 @@
     public class UIGeneratorModel : Model
     {
         public ReactiveProperty<float> progress = new();
-        public bool levelup = false;
-        public float upgrade = default;
+        public SignalValueProperty<bool> OnLevelUpSignal = new();
         
         public ReactiveProperty<string> label = new();
         public ReactiveProperty<float> levelupPrice = new();
@@ -93,6 +107,6 @@
         public ReactiveProperty<float> income = new();
         
         public ReactiveProperty<bool> purchaseAvailable = new ReactiveProperty<bool>();
-        public ReactiveProperty<ICollection<Upgrade>> upgrades = new ReactiveProperty<ICollection<Upgrade>>(new List<Upgrade>());
+        public ReactiveCommand<string> spawn = new();
     }
 }

@@ -1,5 +1,8 @@
-﻿public struct UpgradeGeneratorRequest
+﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator.Components
 {
-    public float Multiplier;
-    public string generatorGuid;
+    public struct UpgradeGeneratorRequest
+    {
+        public float Multiplier;
+        public string generatorGuid;
+    }
 }

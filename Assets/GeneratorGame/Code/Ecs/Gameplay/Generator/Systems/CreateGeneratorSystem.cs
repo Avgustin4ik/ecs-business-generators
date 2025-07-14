@@ -22,6 +22,7 @@
             foreach (var data in _config.GetAllGenerators())
             {
                 var entity = world.NewEntity();
+                
                 ref var generator = ref _aspect.Generator.Add(entity);
                 generator.Guid = data.Guid;
                 generator.Level = index == 0 ? 1 : 0;
@@ -33,7 +34,17 @@
                 
                 levelUpPriceComponent.BasePrice = data.BasePrice;
                 levelUpPriceComponent.UpdatePrice(generator.Level);
-                
+
+                for (var i = 0; i < data.Upgrades.Length; i++)
+                {
+                    var availableUpgrade = data.Upgrades[i];
+                    ref var upgrade = ref _aspect.AvailableUpgrade.Add(world.NewEntity());
+                    upgrade.Multiplayer = availableUpgrade.IncomeMultiplier;
+                    upgrade.Name = availableUpgrade.Name;
+                    upgrade.Price = availableUpgrade.Price;
+                    upgrade.Guid = System.Guid.NewGuid().ToString();
+                    upgrade.GeneratorGuid = generator.Guid;
+                }
                 index++;
             }
         }

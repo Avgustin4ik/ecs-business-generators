@@ -23,10 +23,9 @@
             {
                 ref var generator = ref _aspect.Generator.Get(entity);
                 generator.Level++;
-                generator.CurrentIncome = generator.Level * generator.BaseIncome * (1f + generator.UpgradesMultiplier);
+                generator.UpdateIncome();
                 ref var price = ref _aspect.LevelUpPrice.Get(entity);
                 price.UpdatePrice(generator.Level);
-                
                 _aspect.LevelUp.Del(entity);
             }
         }

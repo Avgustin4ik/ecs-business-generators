@@ -20,10 +20,10 @@ MonoBehaviour:
     DurationInSeconds: 3
     Upgrades:
     - Name: Upgrade 1
-      Price: 0
+      Price: 22
       IncomeMultiplier: 300
     - Name: Upgrade 2
-      Price: 0
+      Price: 44
       IncomeMultiplier: 444
   - BasePrice: 44
     Name: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 2"

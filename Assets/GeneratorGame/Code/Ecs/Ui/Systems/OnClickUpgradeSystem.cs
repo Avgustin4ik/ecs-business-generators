@@ -1,14 +1,17 @@
 ﻿namespace GeneratorGame.Code.Ecs.Ui.Systems
 {
     using Gameplay.Generator;
+    using Gameplay.Generator.Components;
     using Leopotam.EcsLite;
     using Mono;
+    using R3;
 
     public class OnClickUpgradeSystem : IEcsInitSystem, IEcsRunSystem
     {
         private readonly GeneratorAspect _aspect;
         private readonly UiAspect _uiAspect;
         private EcsWorld _world;
+        private EcsFilter _buttonFilter;
 
         public OnClickUpgradeSystem(GeneratorAspect aspect, UiAspect uiAspect)
         {
@@ -19,23 +22,40 @@
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
+            _buttonFilter = _world.Filter<UIViewComponent<UpgradeButtonModel>>().End();
         }
 
         public void Run(IEcsSystems systems)
         {
-            foreach (var viewEntity in _uiAspect.GeneratorViewFilter)
+            foreach (var button in _buttonFilter)
             {
-                ref var viewComponent = ref _world.GetPool<UIViewComponent<UIGeneratorModel>>().Get(viewEntity);
+                ref var viewComponent = ref _uiAspect.UpgradeButton.Get(button);
                 var model = viewComponent.Model;
-                if(model.upgrade == default) continue;
-                model.upgrade = default;
-                ref var link = ref _uiAspect.GeneratorLinked.Get(viewEntity);
-                if(!link.Entity.Unpack(_world,out var generatorEntity)) continue;
-                ref var generatorComponent = ref _aspect.Generator.Get(generatorEntity);
                 
-                ref var request = ref _world.GetPool<UpgradeGeneratorRequest>().Add(generatorEntity);
-                request.Multiplier = model.upgrade;
+                if(!model.OnUpgradeSignal.Take(out var requestGuid)) continue;
+                
+                foreach (var upgradeEntity in _aspect.AvailableUpgradeFilter)
+                {
+                    ref var upgradeComponent = ref _aspect.AvailableUpgrade.Get(upgradeEntity);
+                    if(upgradeComponent.Guid != requestGuid) continue;
+                    _aspect.Purchased.Add(upgradeEntity);
+                    foreach (var genEntity in _aspect.GeneratorFilter)
+                    {
+                        ref var genComponent = ref _aspect.Generator.Get(genEntity);
+                        if(genComponent.Guid != upgradeComponent.GeneratorGuid) continue;
+                        ref var upgradeRequest = ref _aspect.Upgrade.Add(genEntity);
+                        upgradeRequest.Multiplier = upgradeComponent.Multiplayer;
+                        upgradeRequest.generatorGuid = genComponent.Guid;
+                    }
+                }
+                // model.Click.Subscribe(Purchase).AddTo(viewComponent.View);
             }
+        }
+
+        private void Purchase(string x)
+        {
+            var newEntity = _world.NewEntity();
+            ref var request = ref _world.GetPool<UpgradeGeneratorRequest>().Add(newEntity);
         }
     }
 }

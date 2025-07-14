@@ -1,5 +1,6 @@
 ﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator
 {
+    using Components;
     using Leopotam.EcsLite;
 
     public class UpgradeGeneratorSystem : IEcsInitSystem, IEcsRunSystem
@@ -22,8 +23,10 @@
             foreach (var entity in _filter)
             {
                 ref var generator = ref _aspect.Generator.Get(entity);
-                ref var upgradeEvent = ref _aspect.Upgrade.Get(entity);
-                generator.UpgradesMultiplier += upgradeEvent.Multiplier;
+                ref var request = ref _aspect.Upgrade.Get(entity);
+                if (request.Multiplier > 1f) request.Multiplier /= 100f;
+                generator.UpgradesMultiplier += request.Multiplier;
+                generator.UpdateIncome();
                 _aspect.Upgrade.Del(entity);
             }
         }

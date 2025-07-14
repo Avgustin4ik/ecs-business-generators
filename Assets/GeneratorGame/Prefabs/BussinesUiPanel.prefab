@@ -937,7 +937,7 @@ MonoBehaviour:
   levelUpButton: {fileID: 1923906684023377420}
   upgradePanel: {fileID: 7152441494707100916}
   progressBar: {fileID: 4110733122524025231}
-  upgradeButtonView: {fileID: 5317313108898779032, guid: ab7ed93be9ac4b34caa5562180862e90, type: 3}
+  upgradeButtonView: {fileID: 1453067342275900673, guid: ab7ed93be9ac4b34caa5562180862e90, type: 3}
 --- !u!1 &6250045578262234742
 GameObject:
   m_ObjectHideFlags: 0

@@ -26,8 +26,9 @@
             {
                 ref var viewComponent = ref _uiAspect.GeneratorView.Get(viewEntity);
                 var model = viewComponent.Model;
-                if(!model.levelup) continue;
-                model.levelup = false;
+                
+                if(!model.OnLevelUpSignal.Take()) continue;
+                
                 ref var link = ref _uiAspect.GeneratorLinked.Get(viewEntity);
                 if(!link.Entity.Unpack(_world,out var generatorEntity)) continue;
                 ref var request = ref _world.GetPool<LevelUpGeneratorRequest>().Add(generatorEntity);

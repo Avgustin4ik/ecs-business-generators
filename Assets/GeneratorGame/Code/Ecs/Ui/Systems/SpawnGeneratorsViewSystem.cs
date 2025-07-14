@@ -41,6 +41,12 @@ namespace GeneratorGame.Code.Ecs.Ui.Systems
                 ref var generator = ref _generatorAspect.Generator.Get(generatorEntity);
                 SpawnAndLinkAsync(_world.PackEntity(generatorEntity),generator.Guid).Forget();
             }
+
+            foreach (var availableUpgradeEntity in _world.Filter<AvailableUpgradeComponent>().Inc<GeneratorComponent>().End())
+            {
+                ref var u = ref _generatorAspect.AvailableUpgrade.Get(availableUpgradeEntity);
+                Debug.Log("AvailableUpgrade entity Detected");
+            }
             _world.GetPool<GeneratorLoadedComponent>().Add(_world.NewEntity());
         }
 
@@ -55,6 +61,21 @@ namespace GeneratorGame.Code.Ecs.Ui.Systems
             task.WaitForCompletion();
             var uiGeneratorView = task.Result.First();
             InitializeEntity(uiGeneratorView, entityToLink, guid);
+            SpawnUpgrades(uiGeneratorView.Model, entityToLink);
+        }
+
+        private void SpawnUpgrades(UIGeneratorModel model, EcsPackedEntity linkedEntity)
+        {
+            foreach (var upgradeEntity in _generatorAspect.AvailableUpgradeFilter)
+            {
+                ref var component = ref _generatorAspect.AvailableUpgrade.Get(upgradeEntity);
+                
+                if (!linkedEntity.Unpack(_world, out var entity)) continue;
+                
+                ref var generatorComponent = ref _generatorAspect.Generator.Get(entity);
+                if(generatorComponent.Guid != component.GeneratorGuid) continue;
+                model.spawn.Execute(component.Guid);
+            }
         }
 
         private void InitializeEntity(UIGeneratorView view, EcsPackedEntity entityToLink, string guid) 
@@ -63,7 +84,6 @@ namespace GeneratorGame.Code.Ecs.Ui.Systems
             view.ApplyEcsWorld(_world, entity);
             ref var link = ref _world.GetPool<LinkedGeneratorComponent>().Add(entity);
             link.Entity = entityToLink;
-            view.Model.upgrades.Value = _config.GetUpgrades(guid);
         }
     }
 }

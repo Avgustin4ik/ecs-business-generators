@@ -13,7 +13,7 @@
         public TModel Model { get; private set; }
         private bool _isInitialized = false;
 
-        public virtual void ApplyEcsWorld(EcsWorld world, int entity = -1)
+        public virtual void ApplyEcsWorld(EcsWorld world, int entity = -1, Model model = null)
         {
             _world = world;
             var uiEntity = entity == -1 ? _world.NewEntity() : entity;
@@ -21,9 +21,16 @@
             // viewComponent.View = this;
             viewComponent.Type = GetType();
             Entity = _world.PackEntity(uiEntity);
-            Model = new();
-            viewComponent.Model = Model;
+            if (model == null)
+            {
+                Model = new();
+            }
+            else
+            {
+                Model = (TModel)model;
+            }
             OnInitialize();
+            viewComponent.Model = Model;
             _isInitialized = true;
         }
 

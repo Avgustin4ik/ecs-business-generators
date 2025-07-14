@@ -53,11 +53,11 @@
             _uiSystems.Add(new UpdateProgressSystem(generatorAspect,uiAspect));
             _uiSystems.Add(new UpdateBalanceSystem());
             _uiSystems.Add(new OnClickLevelUpSystem(generatorAspect,uiAspect));
-            _uiSystems.Add(new CheckPurchaseAvailabilitySystem());
-            
+            _uiSystems.Add(new OnClickUpgradeSystem(generatorAspect, uiAspect));
             _uiSystems.Add(new UpdateLevelUpButtonViewSystem(generatorAspect, uiAspect));
             _uiSystems.Add(new UpdateGeneratorViewSystem(generatorAspect, uiAspect));
-            
+            _uiSystems.Add(new UpdateUpgradeButtonViewSystem(generatorAspect, uiAspect));
+            _uiSystems.Add(new CheckPurchaseAvailabilitySystem());
             _updateSystems = new GeneratorFeature(_world, generatorDataService);
             _fixedSystems = new EcsSystems(_world);
             _lateSystems = new EcsSystems(_world);

@@ -417,6 +417,7 @@ GameObject:
   - component: {fileID: 2873033926169268629}
   - component: {fileID: 5317313108898779032}
   - component: {fileID: 5252426230053574040}
+  - component: {fileID: 1453067342275900673}
   m_Layer: 5
   m_Name: 'UpgradeButton '
   m_TagString: Untagged
@@ -555,7 +556,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8154244661690448752}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6566210e8e1b43409be53c84d88bcccb, type: 3}
   m_Name: 
@@ -589,3 +590,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1453067342275900673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8154244661690448752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce11c3c3d2244f1daa30dfa2b0c8bd14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 4173130073916262828}
+  priceLabel: {fileID: 2601127287025029496}
+  label: {fileID: 87612962676441257}
+  descriprion: {fileID: 87612962676441257}
