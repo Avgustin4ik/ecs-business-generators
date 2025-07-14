@@ -40,10 +40,24 @@
                     var isPurchased = _generatorAspect.Purchased.Has(entity);
                     model.IsPurchased.Value = isPurchased;
                     if (isPurchased) continue;
-                    foreach (var balanceEntity in _generatorAspect.BalanceFilter)
+
+                    foreach (var e in _generatorAspect.GeneratorFilter)
                     {
-                        ref var balance = ref _generatorAspect.Balance.Get(balanceEntity);
-                        model.IsInteractable.Value = balance.value >= component.Price;
+                        ref var generator = ref _generatorAspect.Generator.Get(e);
+                        
+                        if(generator.Guid!= component.GeneratorGuid) continue;
+                        if (generator.Level > 0)
+                        {
+                            foreach (var balanceEntity in _generatorAspect.BalanceFilter)
+                            {
+                                ref var balance = ref _generatorAspect.Balance.Get(balanceEntity);
+                                model.IsInteractable.Value = balance.value >= component.Price;
+                            }
+                        }
+                        else
+                        {
+                            model.IsInteractable.Value = false;
+                        }
                     }
                 }
             }

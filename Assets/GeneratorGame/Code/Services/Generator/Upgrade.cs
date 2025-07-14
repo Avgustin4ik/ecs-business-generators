@@ -1,4 +1,4 @@
-﻿namespace GeneratorGame.Code.Services
+﻿namespace GeneratorGame.Code.Services.Generator
 {
     using System;
 

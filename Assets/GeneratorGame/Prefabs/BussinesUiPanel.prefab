@@ -931,13 +931,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 798b709a3e8f419eb83e790327b78fb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelText: {fileID: 1594933178130408028}
+  levelText: {fileID: 6792310360665934655}
   incomeText: {fileID: 228892014947574268}
   levelUpPriceLabel: {fileID: 3264930403843481787}
   levelUpButton: {fileID: 1923906684023377420}
   upgradePanel: {fileID: 7152441494707100916}
   progressBar: {fileID: 4110733122524025231}
-  upgradeButtonView: {fileID: 1453067342275900673, guid: ab7ed93be9ac4b34caa5562180862e90, type: 3}
+  upgradeButtonPrefab: {fileID: 1453067342275900673, guid: ab7ed93be9ac4b34caa5562180862e90, type: 3}
 --- !u!1 &6250045578262234742
 GameObject:
   m_ObjectHideFlags: 0

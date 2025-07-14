@@ -8,6 +8,7 @@
     using GeneratorGame.Code.Services;
     using GeneratorGame.Code.Services.Ui;
     using Leopotam.EcsLite;
+    using Services.Generator;
     using UnityEngine;
 
     public class EcsCore : MonoBehaviour

@@ -3,6 +3,7 @@
     using System.Linq;
     using Services;
     using Leopotam.EcsLite;
+    using Services.Generator;
 
     public class CreateGeneratorSystem : IEcsInitSystem
     {

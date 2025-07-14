@@ -1,5 +1,6 @@
 ﻿namespace GeneratorGame.Code.Ecs.Ui.Mono
 {
+    using System.Text;
     using R3;
     using TMPro;
     using UnityEngine;
@@ -10,40 +11,56 @@
         [SerializeField] private Button button;
         [SerializeField] private TextMeshProUGUI priceLabel;
         [SerializeField] private TextMeshProUGUI label;
-        [SerializeField] private TextMeshProUGUI descriprion;
-        
+        [SerializeField] private TextMeshProUGUI description;
+        private readonly StringBuilder _cachedString = new StringBuilder(20);
         public override void OnInitialize()
         {
             base.OnInitialize();
+
             Model.Name.Subscribe(x => label.text = x).AddTo(this);
-            Model.Multiplayer.Subscribe(x => descriprion.text = $"Доход: + {x}%").AddTo(this);
+            Model.Multiplayer.Subscribe(UpdateDescription).AddTo(this);
             Model.Price.Subscribe(UpdatePrice).AddTo(this);
             Model.IsPurchased.Subscribe(SetPurchased).AddTo(this);
             Model.IsInteractable.Subscribe(SetInteractable).AddTo(this);
-            button.OnClickAsObservable().Subscribe(_ => Model.Click.OnNext(Model.Guid)).AddTo(this);
-            button.OnClickAsObservable().Subscribe(_ => Model.OnUpgradeSignal.SetValue(Model.Guid));
+            button.OnClickAsObservable().Subscribe(_ => Model.OnUpgradeSignal.SetValue(Model.Guid)).AddTo(this);
         }
-        
+
+        private void UpdateDescription(float x)
+        {
+            if (x < 1) x *= 100f;
+            _cachedString.Clear();
+            _cachedString
+                .Append("Доход: + ")
+                .Append(x)
+                .Append("%");
+            description.text = _cachedString.ToString();
+        }
 
         private void SetInteractable(bool value)
         {
             button.interactable = value;
         }
+
         private void SetPurchased(bool value)
         {
             if (value) priceLabel.text = "Куплено!";
             Model.IsInteractable.Value = false;
         }
+
         private void UpdatePrice(float value)
         {
-            if(Model.IsPurchased.Value) return;
-            label.text = value <= 0 ? "Бесплатно!" : $"Цена: {value}$";
+            if (Model.IsPurchased.Value) return;
+            _cachedString.Clear();
+            _cachedString
+                .Append("Цена: ")
+                .Append(value)
+                .Append("$");
+            priceLabel.text = value <= 0 ? "Бесплатно!" : _cachedString.ToString();
         }
     }
 
     public class UpgradeButtonModel : Model
     {
-        public Subject<string> Click = new();
         public ReactiveProperty<string> Name = new();
         public ReactiveProperty<float> Multiplayer = new();
         public ReactiveProperty<float> Price = new();

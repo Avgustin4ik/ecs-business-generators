@@ -1,6 +1,5 @@
-﻿namespace GeneratorGame.Code.Services
+﻿namespace GeneratorGame.Code.Services.Generator
 {
-    using System.Collections;
     using System.Collections.Generic;
 
     public interface IGeneratorDataService

@@ -415,7 +415,6 @@ GameObject:
   - component: {fileID: 6062849614807491226}
   - component: {fileID: 4173130073916262828}
   - component: {fileID: 2873033926169268629}
-  - component: {fileID: 5317313108898779032}
   - component: {fileID: 5252426230053574040}
   - component: {fileID: 1453067342275900673}
   m_Layer: 5
@@ -549,21 +548,6 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &5317313108898779032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8154244661690448752}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6566210e8e1b43409be53c84d88bcccb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  button: {fileID: 4173130073916262828}
-  priceLabel: {fileID: 2601127287025029496}
-  rewardLabel: {fileID: 8036591950378426017}
 --- !u!114 &5252426230053574040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -605,4 +589,4 @@ MonoBehaviour:
   button: {fileID: 4173130073916262828}
   priceLabel: {fileID: 2601127287025029496}
   label: {fileID: 87612962676441257}
-  descriprion: {fileID: 87612962676441257}
+  description: {fileID: 8036591950378426017}

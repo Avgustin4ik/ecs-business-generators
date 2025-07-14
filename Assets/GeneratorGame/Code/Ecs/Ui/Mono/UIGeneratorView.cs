@@ -18,9 +18,8 @@
         [SerializeField] private Button levelUpButton;
         [SerializeField] private CanvasGroup upgradePanel;
         [SerializeField] private Image progressBar;
+        public UpgradeButtonView upgradeButtonPrefab;
  
-        private List<PurchaseButtonModel> upgradeButtons = new List<PurchaseButtonModel>();
-        
         #endregion
         
         public override void OnInitialize()
@@ -32,8 +31,8 @@
             
             Model.levelUpAvailable.Subscribe(x => levelUpButton.interactable = x).AddTo(this);
             Model.levelupPrice.Subscribe(SetLevelUpPriceLabel).AddTo(this);
-            Model.level.Subscribe(x => levelText.text = x.ToString());
-            Model.income.Subscribe(x => incomeText.text = x.ToString());
+            Model.level.Subscribe(SetLevelText);
+            Model.income.Subscribe(SetIncomeText);
             Model.spawn.Subscribe(SpawnButton).AddTo(this);
 
         }
@@ -45,7 +44,7 @@
 
         private void SpawnButton(string upgradeGuid)
         {
-            var tAsync = Object.InstantiateAsync<UpgradeButtonView>(upgradeButtonView, upgradePanel.transform).GetOperation();
+            var tAsync = Object.InstantiateAsync<UpgradeButtonView>(upgradeButtonPrefab, upgradePanel.transform).GetOperation();
             tAsync.WaitForCompletion();
             var button = (UpgradeButtonView)tAsync.Result.First();
             button.ApplyEcsWorld(EcsCore.EcsGlobalData.World);
@@ -53,38 +52,10 @@
             Debug.Log($"Upgrade Button with guid {upgradeGuid} should be spawned");
         }
 
-        public UpgradeButtonView upgradeButtonView;
-        private void SpawnButton(ICollection<UpgradeButtonModel> upgrades)
-        {
-            if(upgrades == null) return;
-            foreach (var upgradeButtonModel in upgrades)
-            {
-                var tAsync = Object.InstantiateAsync<UpgradeButtonView>(upgradeButtonView, upgradePanel.transform).GetOperation();
-                tAsync.WaitForCompletion();
-                var button = (UpgradeButtonView)tAsync.Result.First();
-                button.ApplyEcsWorld(EcsCore.EcsGlobalData.World);
-                var buttonModel = button.Model;
-                buttonModel.Price.Value = upgradeButtonModel.Price.Value;
-                buttonModel.Multiplayer.Value = upgradeButtonModel.Multiplayer.Value;
-                buttonModel.IsInteractable.Value = upgradeButtonModel.IsInteractable.Value;
-                buttonModel.Name.Value = upgradeButtonModel.Name.Value;
-                buttonModel.IsPurchased.Value = upgradeButtonModel.IsPurchased.Value;
-                
-                // buttonModel.OnClick.Subscribe();
-                // upgradeButtons.Add(buttonModel);
-            }
-            LayoutRebuilder.ForceRebuildLayoutImmediate(upgradePanel.transform as RectTransform);
-        }
 
-        private void SetLevelText(string text)
-        {
-            levelText.text = text;
-        }
+        private void SetLevelText(int value) => levelText.text = value.ToString();
 
-        private void SetIncomeText(string text)
-        {
-            incomeText.text = text;
-        }
+        private void SetIncomeText(float value) => incomeText.text = value.ToString();
 
         private void UpdateProgress(float progress)
         {
