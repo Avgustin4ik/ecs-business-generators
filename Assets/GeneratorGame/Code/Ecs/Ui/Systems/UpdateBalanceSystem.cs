@@ -3,7 +3,6 @@
     using Gameplay.Player;
     using Leopotam.EcsLite;
     using Mono;
-    using UnityEngine;
 
     public class UpdateBalanceSystem : IEcsInitSystem, IEcsRunSystem
     {
@@ -16,7 +15,7 @@
         {
             _world = systems.GetWorld();
             _viewFilter = _world.Filter<UIViewComponent<UIBalanceModel>>().End();
-            _balancePool = _world.GetPool<BalanceComponent>(); // Ensure BalanceComponent is created
+            _balancePool = _world.GetPool<BalanceComponent>();
             _balanceFilter = _world.Filter<BalanceComponent>().End();
         }
 

@@ -2,7 +2,6 @@
 {
     using Gameplay.Generator;
     using Leopotam.EcsLite;
-    using Mono;
 
     public class OnClickLevelUpSystem : IEcsInitSystem, IEcsRunSystem
     {
@@ -31,7 +30,9 @@
                 
                 ref var link = ref _uiAspect.GeneratorLinked.Get(viewEntity);
                 if(!link.Entity.Unpack(_world,out var generatorEntity)) continue;
-                ref var request = ref _world.GetPool<LevelUpGeneratorRequest>().Add(generatorEntity);
+                
+                _aspect.LevelUp.Add(generatorEntity);
+                
                 ref var levelUpPrice = ref _aspect.LevelUpPrice.Get(generatorEntity);
                 foreach (var entity in _aspect.BalanceFilter)
                 {

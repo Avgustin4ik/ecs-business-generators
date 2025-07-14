@@ -1,8 +1,6 @@
-﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator
+﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator.Systems
 {
-    using System;
     using Leopotam.EcsLite;
-    using Player;
     using UnityEngine;
 
     public class GenerateIncomeSystem : IEcsInitSystem, IEcsRunSystem

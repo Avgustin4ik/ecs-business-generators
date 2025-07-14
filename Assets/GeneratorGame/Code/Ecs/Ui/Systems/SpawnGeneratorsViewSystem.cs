@@ -1,11 +1,10 @@
 namespace GeneratorGame.Code.Ecs.Ui.Systems
 {
-    using System.Collections.Generic;
     using System.Linq;
     using Cysharp.Threading.Tasks;
     using Gameplay.Generator;
+    using Gameplay.Generator.Components;
     using Mono;
-    using Services;
     using GeneratorGame.Code.Services.Ui;
     using Leopotam.EcsLite;
     using UnityEngine;
@@ -14,23 +13,23 @@ namespace GeneratorGame.Code.Ecs.Ui.Systems
     {
         private EcsWorld _world;
         private readonly IUiService _uiConfig;
-        private readonly IGeneratorDataService _config;
         private readonly Transform _root;
         private EcsFilter _filter;
         private readonly GeneratorAspect _generatorAspect;
+        private EcsPool<GeneratorLoadedComponent> _loadedPool;
 
-        public SpawnGeneratorsViewSystem(GeneratorAspect genAspect, IUiService uiService, GeneratorDataService generatorDataService, Transform uiRoot = null)
+        public SpawnGeneratorsViewSystem(GeneratorAspect genAspect, IUiService uiService, Transform uiRoot = null)
         {
             _generatorAspect = genAspect;
             _root = uiRoot;
             _uiConfig = uiService;
-            _config = generatorDataService;
         }
 
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
             _filter = _world.Filter<GeneratorLoadedComponent>().End();
+            _loadedPool = _world.GetPool<GeneratorLoadedComponent>();
         }
         
         public void Run(IEcsSystems systems)
@@ -47,7 +46,7 @@ namespace GeneratorGame.Code.Ecs.Ui.Systems
                 ref var u = ref _generatorAspect.AvailableUpgrade.Get(availableUpgradeEntity);
                 Debug.Log("AvailableUpgrade entity Detected");
             }
-            _world.GetPool<GeneratorLoadedComponent>().Add(_world.NewEntity());
+            _loadedPool.Add(_world.NewEntity());
         }
 
         private async UniTaskVoid SpawnAndLinkAsync(EcsPackedEntity packedEntity, string guid)

@@ -3,7 +3,6 @@
     using System;
     using Gameplay;
     using Leopotam.EcsLite;
-    using R3;
     using UnityEngine;
 
     public abstract class UIBase<TModel> : MonoBehaviour where TModel : Model, new()
@@ -18,7 +17,6 @@
             _world = world;
             var uiEntity = entity == -1 ? _world.NewEntity() : entity;
             ref var viewComponent = ref _world.GetPool<UIViewComponent<TModel>>().Add(uiEntity);
-            // viewComponent.View = this;
             viewComponent.Type = GetType();
             Entity = _world.PackEntity(uiEntity);
             if (model == null)

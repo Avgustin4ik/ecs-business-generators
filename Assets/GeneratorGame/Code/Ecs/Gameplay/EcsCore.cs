@@ -1,121 +1,99 @@
 ﻿namespace GeneratorGame.Code.Ecs.Gameplay
 {
     using System;
-    using System.Threading;
     using Generator;
+    using Generator.Systems;
     using Leopotam.EcsLite;
     using Services;
     using Services.Ui;
-    using Ui;
     using Ui.Systems;
     using UnityEngine;
 
     public class EcsCore : MonoBehaviour
     {
-        public GeneratorDataServiceSource GeneratorDataServiceSource;
-        public UiServiceSource UiServiceSource;
+        public GeneratorDataServiceSource generatorDataServiceSource;
+        public UiServiceSource uiServiceSource;
         private EcsWorld _world;
-        private IDisposable _worldDisposable;
-        private IEcsSystems _updateSystems;
-        private IEcsSystems _fixedSystems;
-        private IEcsSystems _lateSystems;
-        private UiFeature _uiSystems;
+        private IEcsSystems _gameplaySystems;
+        private IEcsSystems _uiSystems;
         public EcsWorld World => _world;
-        public IDisposable WorldDisposable => _worldDisposable;
-    
-        public Transform UiRoot;
+        public Transform uiRoot;
         private EcsSystems _debugSystems;
 
         public static class EcsGlobalData
         {
             public static EcsWorld World { get; private set; }
+
             public static void SetWorld(EcsWorld world)
             {
                 World = world ?? throw new ArgumentNullException(nameof(world), "EcsWorld cannot be null");
             }
         }
 
-
         private void Awake()
         {
             _world = new EcsWorld();
             EcsGlobalData.SetWorld(_world); //для доступности в монобехах
-            
-            _worldDisposable = new CancellationTokenSource();
-            var generatorDataService = GeneratorDataServiceSource.CreateService();
-            var uiService = UiServiceSource.CreateService();
+
+            var generatorDataService = generatorDataServiceSource.CreateService();
+            var uiService = uiServiceSource.CreateService();
 
             var generatorAspect = new GeneratorAspect(_world);
             var uiAspect = new UiAspect(_world);
-            _uiSystems = new UiFeature(_world);//TODO добавить возможность добавления нескольких Shaerd объектов в системы (фичи)
+
+            _uiSystems = new EcsSystems(_world);
+            _uiSystems
+                .Add(new SpawnGeneratorsViewSystem(generatorAspect, uiService, uiRoot))
+                .Add(new UpdateProgressSystem(generatorAspect, uiAspect))
+                .Add(new UpdateBalanceSystem())
+                .Add(new OnClickLevelUpSystem(generatorAspect, uiAspect))
+                .Add(new OnClickUpgradeSystem(generatorAspect, uiAspect))
+                .Add(new UpdateLevelUpButtonViewSystem(generatorAspect, uiAspect))
+                .Add(new UpdateGeneratorViewSystem(generatorAspect, uiAspect))
+                .Add(new UpdateUpgradeButtonViewSystem(generatorAspect, uiAspect));
             
-            _uiSystems.Add(new SpawnGeneratorsViewSystem(generatorAspect, uiService,generatorDataService, UiRoot));
-            _uiSystems.Add(new UpdateProgressSystem(generatorAspect,uiAspect));
-            _uiSystems.Add(new UpdateBalanceSystem());
-            _uiSystems.Add(new OnClickLevelUpSystem(generatorAspect,uiAspect));
-            _uiSystems.Add(new OnClickUpgradeSystem(generatorAspect, uiAspect));
-            _uiSystems.Add(new UpdateLevelUpButtonViewSystem(generatorAspect, uiAspect));
-            _uiSystems.Add(new UpdateGeneratorViewSystem(generatorAspect, uiAspect));
-            _uiSystems.Add(new UpdateUpgradeButtonViewSystem(generatorAspect, uiAspect));
-            _uiSystems.Add(new CheckPurchaseAvailabilitySystem());
-            _updateSystems = new GeneratorFeature(_world, generatorDataService);
-            _fixedSystems = new EcsSystems(_world);
-            _lateSystems = new EcsSystems(_world);
+            _gameplaySystems = new EcsSystems(_world, generatorDataService);
+            _gameplaySystems
+                .Add(new StartGameSystem(generatorAspect))
+                .Add(new CreateGeneratorSystem(generatorAspect))
+                .Add(new GenerateIncomeSystem(generatorAspect))
+                .Add(new LevelUpGeneratorSystem(generatorAspect))
+                .Add(new UpgradeGeneratorSystem(generatorAspect));
             
             _debugSystems = new EcsSystems(_world);
 #if UNITY_EDITOR
-                // Регистрируем отладочные системы по контролю за состоянием каждого отдельного мира:
-                // .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ("events"))
-                _debugSystems.Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
-                    // Регистрируем отладочные системы по контролю за текущей группой систем. 
-                    .Add(new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem());
+            // Регистрируем отладочные системы по контролю за состоянием каждого отдельного мира:
+            // .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ("events"))
+            _debugSystems.Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
+                // Регистрируем отладочные системы по контролю за текущей группой систем. 
+                .Add(new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem());
 #endif
         }
-        
+
         private void Start()
         {
             _uiSystems.Init();
-            _updateSystems.Init();
-            _fixedSystems.Init();
-            _lateSystems.Init();
-            
+            _gameplaySystems.Init();
 #if UNITY_EDITOR
             // Инициализируем отладочные системы:
             _debugSystems.Init();
 #endif
         }
-        
+
         private void Update()
         {
             _debugSystems?.Run();
-            _updateSystems?.Run();
+            _gameplaySystems?.Run();
             _uiSystems?.Run();
         }
-        
-        private void FixedUpdate()
-        {
-            _fixedSystems?.Run();
-        }
-        
-        private void LateUpdate()
-        {
-            _lateSystems?.Run();
-        }
-        
         private void OnDestroy()
         {
-            _updateSystems?.Destroy();
-            _fixedSystems?.Destroy();
-            _lateSystems?.Destroy();
-            _worldDisposable?.Dispose();
+            _gameplaySystems?.Destroy();
             _uiSystems?.Destroy();
             _world?.Destroy();
             _world = null;
             _uiSystems = null;
-            _worldDisposable = null;
-            _updateSystems = null;
-            _fixedSystems = null;
-            _lateSystems = null;
+            _gameplaySystems = null;
         }
     }
 }

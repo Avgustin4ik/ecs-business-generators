@@ -1,5 +1,6 @@
 ﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator.Systems
 {
+    using Components;
     using Leopotam.EcsLite;
 
     public class LevelUpGeneratorSystem : IEcsInitSystem, IEcsRunSystem

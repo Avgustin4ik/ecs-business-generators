@@ -1,6 +1,5 @@
 ﻿namespace GeneratorGame.Code.Ecs.Ui.Mono
 {
-    using System;
     using R3;
     using TMPro;
     using UnityEngine;

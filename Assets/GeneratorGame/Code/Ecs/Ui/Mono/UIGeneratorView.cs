@@ -1,12 +1,9 @@
 ﻿namespace GeneratorGame.Code.Ecs.Ui.Mono
 {
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
-    using Cysharp.Threading.Tasks;
     using Gameplay;
     using R3;
-    using Services;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;

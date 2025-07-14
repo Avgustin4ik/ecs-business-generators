@@ -1,7 +1,7 @@
 ﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator.Systems
 {
     using System.Linq;
-    using GeneratorGame.Code.Services;
+    using Services;
     using Leopotam.EcsLite;
 
     public class CreateGeneratorSystem : IEcsInitSystem

@@ -1,8 +1,5 @@
-﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator
+﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator.Components
 {
-    using System;
-    using System.Collections.Generic;
-
     public struct GeneratorComponent
     {
         public int Level;

@@ -1,10 +1,8 @@
 ﻿namespace GeneratorGame.Code.Ecs.Ui.Systems
 {
     using Gameplay.Generator;
-    using Gameplay.Generator.Components;
     using Leopotam.EcsLite;
     using Mono;
-    using R3;
 
     public class OnClickUpgradeSystem : IEcsInitSystem, IEcsRunSystem
     {
@@ -48,14 +46,7 @@
                         upgradeRequest.generatorGuid = genComponent.Guid;
                     }
                 }
-                // model.Click.Subscribe(Purchase).AddTo(viewComponent.View);
             }
-        }
-
-        private void Purchase(string x)
-        {
-            var newEntity = _world.NewEntity();
-            ref var request = ref _world.GetPool<UpgradeGeneratorRequest>().Add(newEntity);
         }
     }
 }

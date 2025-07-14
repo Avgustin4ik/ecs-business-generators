@@ -1,7 +1,5 @@
 ﻿namespace GeneratorGame.Code.Ecs.Ui.Mono
 {
-    using Cysharp.Threading.Tasks;
-    using Leopotam.EcsLite;
     using R3;
     using TMPro;
     using UnityEngine;

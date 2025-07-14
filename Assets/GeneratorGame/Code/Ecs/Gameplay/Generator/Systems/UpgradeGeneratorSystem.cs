@@ -1,4 +1,4 @@
-﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator
+﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator.Systems
 {
     using Components;
     using Leopotam.EcsLite;
