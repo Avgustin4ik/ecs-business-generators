@@ -1,6 +1,5 @@
 namespace GeneratorGame.Code.Services.Ui
 {
-    using Ecs.Ui;
     using Ecs.Ui.Mono;
     using UnityEngine;
 

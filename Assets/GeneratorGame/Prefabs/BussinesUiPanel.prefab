@@ -931,6 +931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 798b709a3e8f419eb83e790327b78fb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  label: {fileID: 1280043054629565997}
   levelText: {fileID: 6792310360665934655}
   incomeText: {fileID: 228892014947574268}
   levelUpPriceLabel: {fileID: 3264930403843481787}

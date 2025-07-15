@@ -1,6 +1,6 @@
 ﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator
 {
-    using GeneratorGame.Code.Ecs.Gameplay.Player;
+    using Player;
     using Leopotam.EcsLite;
     using Components;
 

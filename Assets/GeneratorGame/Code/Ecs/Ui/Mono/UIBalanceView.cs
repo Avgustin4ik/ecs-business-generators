@@ -14,7 +14,7 @@
         public override void OnInitialize()
         {
             base.OnInitialize();
-            this.Model.Balance.Subscribe(SetBalanceText).AddTo(this);
+            Model.Balance.Subscribe(SetBalanceText).AddTo(this);
         }
 
         public void SetBalanceText(float value)

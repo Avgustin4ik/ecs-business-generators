@@ -1,7 +1,7 @@
 ﻿namespace GeneratorGame.Code.Ecs.Ui.Mono
 {
     using System;
-    using Gameplay;
+    using Components;
     using Leopotam.EcsLite;
     using UnityEngine;
 
@@ -19,9 +19,10 @@
             ref var viewComponent = ref _world.GetPool<UIViewComponent<TModel>>().Add(uiEntity);
             viewComponent.Type = GetType();
             Entity = _world.PackEntity(uiEntity);
+            
             if (model == null)
             {
-                Model = new();
+                Model = new TModel();
             }
             else
             {

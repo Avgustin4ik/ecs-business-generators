@@ -1,5 +1,6 @@
 ﻿namespace GeneratorGame.Code.Ecs.Ui.Systems
 {
+    using Components;
     using Gameplay.Generator;
     using Leopotam.EcsLite;
     using Mono;
@@ -37,6 +38,11 @@
                     ref var upgradeComponent = ref _aspect.AvailableUpgrade.Get(upgradeEntity);
                     if(upgradeComponent.Guid != requestGuid) continue;
                     _aspect.Purchased.Add(upgradeEntity);
+                    foreach (var e in _aspect.BalanceFilter)
+                    {
+                        ref var balance = ref _aspect.Balance.Get(e);
+                        balance.value -= upgradeComponent.Price;
+                    }
                     foreach (var genEntity in _aspect.GeneratorFilter)
                     {
                         ref var genComponent = ref _aspect.Generator.Get(genEntity);

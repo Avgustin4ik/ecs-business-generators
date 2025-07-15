@@ -1,7 +1,7 @@
-﻿namespace GeneratorGame.Code.Ecs.Ui
+﻿namespace GeneratorGame.Code.Ecs.Ui.Components
 {
     using System;
-    using Mono;
+    using GeneratorGame.Code.Ecs.Ui.Mono;
 
     public struct UIViewComponent<TModel> where TModel : Model, new()
     {

@@ -1,5 +1,6 @@
 ﻿namespace GeneratorGame.Code.Ecs.Ui.Systems
 {
+    using Components;
     using Gameplay.Generator;
     using Leopotam.EcsLite;
     using Mono;

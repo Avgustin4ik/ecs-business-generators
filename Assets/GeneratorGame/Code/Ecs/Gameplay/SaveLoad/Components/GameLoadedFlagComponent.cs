@@ -1,4 +1,4 @@
-namespace GeneratorGame.Code.Ecs.Gameplay.SaveLoad
+namespace GeneratorGame.Code.Ecs.Gameplay.SaveLoad.Components
 {
     public struct GameLoadedFlagComponent
     {

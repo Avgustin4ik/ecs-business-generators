@@ -1,6 +1,5 @@
 namespace GeneratorGame.Code.Services.Ui
 {
-    using Ecs.Ui;
     using Ecs.Ui.Mono;
     using UnityEngine;
 
@@ -15,8 +14,8 @@ namespace GeneratorGame.Code.Services.Ui
         private readonly Transform _uiRoot;
         public UiService(UIGeneratorView uiGeneratorViewPrefab, Transform uiRoot)
         {
-            this._uiGeneratorViewPrefab = uiGeneratorViewPrefab;
-            this._uiRoot = uiRoot;
+            _uiGeneratorViewPrefab = uiGeneratorViewPrefab;
+            _uiRoot = uiRoot;
         }
 
         public UIGeneratorView GeneratorPrefab => _uiGeneratorViewPrefab;

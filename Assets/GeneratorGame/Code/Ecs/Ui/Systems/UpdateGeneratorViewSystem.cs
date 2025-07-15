@@ -31,6 +31,7 @@
                 ref var viewComponent = ref _uiAspect.GeneratorView.Get(view);
                 var model = viewComponent.Model;
                 model.income.Value = generator.CurrentIncome;
+                model.label.Value = generator.Name;
             }
         }
     }

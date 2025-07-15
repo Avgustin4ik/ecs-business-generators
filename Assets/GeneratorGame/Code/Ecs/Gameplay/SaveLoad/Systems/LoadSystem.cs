@@ -1,16 +1,16 @@
-namespace GeneratorGame.Code.Ecs.Gameplay.SaveLoad
+namespace GeneratorGame.Code.Ecs.Gameplay.SaveLoad.Systems
 {
     using System.Collections.Generic;
-    using Generator;
+    using Components;
+    using GeneratorGame.Code.Ecs.Gameplay.Generator;
     using Leopotam.EcsLite;
     using UnityEngine;
 
-    public class LoadSystem : IEcsInitSystem, IEcsRunSystem
+    public class LoadSystem : IEcsInitSystem, IEcsPostRunSystem
     {
         private readonly GeneratorAspect _aspect;
         private EcsFilter _filter;
         private EcsPool<GameLoadedFlagComponent> _pool;
-        private EcsFilter _levleUpPriceFilter;
 
         public LoadSystem(GeneratorAspect aspect)
         {
@@ -21,17 +21,17 @@ namespace GeneratorGame.Code.Ecs.Gameplay.SaveLoad
             var world = systems.GetWorld();
             _filter = world.Filter<GameLoadedFlagComponent>().End();
             _pool = world.GetPool<GameLoadedFlagComponent>();
-            _levleUpPriceFilter = world.Filter<LevelUpPriceComponent>().End();
         }
 
-        public void Run(IEcsSystems systems)
+        public void PostRun(IEcsSystems systems)
         {
             if(_filter.GetEntitiesCount()>0) return;
-            
+            _pool.Add(systems.GetWorld().NewEntity());
+
             foreach (var e in _aspect.BalanceFilter)
             {
                 ref var balance = ref _aspect.Balance.Get(e);
-                balance.value = PlayerPrefs.GetFloat("balance", 0);
+                balance.value = PlayerPrefs.GetFloat(SaveKeys.BALANCE, 0);
             }
             
             foreach (var e in _aspect.GeneratorFilter)
@@ -42,8 +42,8 @@ namespace GeneratorGame.Code.Ecs.Gameplay.SaveLoad
                 {
 #if UNITY_EDITOR
                     Debug.Log($"GeneratorSaveData with guid {generator.Guid} not found");
-                    continue;
 #endif
+                    continue;
                 }
                 var data = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveSystem.GeneratorSaveData>(json);
                 
@@ -51,24 +51,19 @@ namespace GeneratorGame.Code.Ecs.Gameplay.SaveLoad
                 generator.Level = data.Level;
                 generator.UpdateIncome();
                 
-                
                 ref var lvlupPrice = ref _aspect.LevelUpPrice.Get(e);
                 lvlupPrice.UpdatePrice(generator.Level);
-                // foreach (var entity in _levleUpPriceFilter)
-                // {
-                // }
             }
 
-            var upgradesJson = PlayerPrefs.GetString("upgrades",string.Empty);
+            var upgradesJson = PlayerPrefs.GetString(SaveKeys.UPGRADES,string.Empty);
             
             
             if (string.IsNullOrEmpty(upgradesJson))
             {
 #if UNITY_EDITOR
                 Debug.Log($"LoadSystem: upgrades data not found");
-                _pool.Add(systems.GetWorld().NewEntity());
-                return;
 #endif
+                return;
             }
             
             var upgradesSaveHashSet = Newtonsoft.Json.JsonConvert.DeserializeObject<HashSet<string>>(upgradesJson);

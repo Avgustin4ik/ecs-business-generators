@@ -9,6 +9,7 @@
         public float Progress;
         public string Guid;
         public float CurrentIncome;
+        public string Name;
 
         public void UpdateIncome() => CurrentIncome = Level * BaseIncome * (1f + UpgradesMultiplier);
     }

@@ -1,6 +1,6 @@
 namespace GeneratorGame.Code.Ecs.Ui.Systems
 {
-    using System.Linq;
+    using Components;
     using Cysharp.Threading.Tasks;
     using Gameplay.Generator;
     using Gameplay.Generator.Components;
@@ -38,7 +38,7 @@ namespace GeneratorGame.Code.Ecs.Ui.Systems
             foreach (var generatorEntity in _generatorAspect.GeneratorFilter)
             {
                 ref var generator = ref _generatorAspect.Generator.Get(generatorEntity);
-                SpawnAndLinkAsync(_world.PackEntity(generatorEntity),generator.Guid).Forget();
+                SpawnAndLinkAsync(_world.PackEntity(generatorEntity),generator.Guid);
             }
 
             foreach (var availableUpgradeEntity in _world.Filter<AvailableUpgradeComponent>().Inc<GeneratorComponent>().End())
@@ -58,7 +58,7 @@ namespace GeneratorGame.Code.Ecs.Ui.Systems
         {
             var task = Object.InstantiateAsync<UIGeneratorView>(_uiConfig.GeneratorPrefab, _root);
             task.WaitForCompletion();
-            var uiGeneratorView = task.Result.First();
+            var uiGeneratorView = task.Result[0];
             InitializeEntity(uiGeneratorView, entityToLink, guid);
             SpawnUpgrades(uiGeneratorView.Model, entityToLink);
         }

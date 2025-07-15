@@ -1,8 +1,5 @@
 ﻿namespace GeneratorGame.Code.Ecs.Ui.Mono
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using Gameplay;
     using R3;
     using TMPro;
     using UnityEngine;
@@ -11,7 +8,8 @@
     public class UIGeneratorView : UIBase<UIGeneratorModel>
     {
         #region inspector
-        
+
+        [SerializeField] private TextMeshProUGUI label;
         [SerializeField] private TextMeshProUGUI levelText;
         [SerializeField] private TextMeshProUGUI incomeText;
         [SerializeField] private TextMeshProUGUI levelUpPriceLabel;
@@ -19,23 +17,26 @@
         [SerializeField] private CanvasGroup upgradePanel;
         [SerializeField] private Image progressBar;
         public UpgradeButtonView upgradeButtonPrefab;
- 
+
         #endregion
-        
+
         public override void OnInitialize()
         {
             base.OnInitialize();
             Model.progress.Subscribe(UpdateProgress).AddTo(this);
-            
+
             levelUpButton.OnClickAsObservable().Subscribe(_ => Model.OnLevelUpSignal.SetValue(true)).AddTo(this);
-            
-            Model.levelUpAvailable.Subscribe(x => levelUpButton.interactable = x).AddTo(this);
+            Model.label.Subscribe(UpdateLabel).AddTo(this);
+            Model.levelUpAvailable.Subscribe(SetInteractable).AddTo(this);
             Model.levelupPrice.Subscribe(SetLevelUpPriceLabel).AddTo(this);
             Model.level.Subscribe(SetLevelText);
             Model.income.Subscribe(SetIncomeText);
             Model.spawn.Subscribe(SpawnButton).AddTo(this);
-
         }
+
+        private void SetInteractable(bool value) => levelUpButton.interactable = value;
+
+        private void UpdateLabel(string value) => label.text = value;
 
         private void SetLevelUpPriceLabel(float price)
         {
@@ -44,14 +45,13 @@
 
         private void SpawnButton(string upgradeGuid)
         {
-            var tAsync = Object.InstantiateAsync<UpgradeButtonView>(upgradeButtonPrefab, upgradePanel.transform).GetOperation();
+            var tAsync = InstantiateAsync<UpgradeButtonView>(upgradeButtonPrefab, upgradePanel.transform)
+                .GetOperation();
             tAsync.WaitForCompletion();
-            var button = (UpgradeButtonView)tAsync.Result.First();
+            var button = (UpgradeButtonView)tAsync.Result[0];
             button.ApplyEcsWorld(EcsCore.EcsGlobalData.World);
             button.Model.Guid = upgradeGuid;
-            Debug.Log($"Upgrade Button with guid {upgradeGuid} should be spawned");
         }
-
 
         private void SetLevelText(int value) => levelText.text = value.ToString();
 
@@ -67,14 +67,11 @@
     {
         public ReactiveProperty<float> progress = new();
         public SignalValueProperty<bool> OnLevelUpSignal = new();
-        
         public ReactiveProperty<string> label = new();
         public ReactiveProperty<float> levelupPrice = new();
         public ReactiveProperty<bool> levelUpAvailable = new ReactiveProperty<bool>();
         public ReactiveProperty<int> level = new();
         public ReactiveProperty<float> income = new();
-        
-        public ReactiveProperty<bool> purchaseAvailable = new ReactiveProperty<bool>();
         public ReactiveCommand<string> spawn = new();
     }
 }

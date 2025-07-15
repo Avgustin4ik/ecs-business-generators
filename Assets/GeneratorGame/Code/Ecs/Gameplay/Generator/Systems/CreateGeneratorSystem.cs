@@ -1,7 +1,5 @@
 ﻿namespace GeneratorGame.Code.Ecs.Gameplay.Generator.Systems
 {
-    using System.Linq;
-    using Services;
     using Leopotam.EcsLite;
     using Services.Generator;
 
@@ -25,6 +23,7 @@
                 var entity = world.NewEntity();
                 
                 ref var generator = ref _aspect.Generator.Add(entity);
+                generator.Name = data.Name;
                 generator.Guid = data.Guid;
                 generator.Level = index == 0 ? 1 : 0;
                 generator.BaseIncome = data.Income;
